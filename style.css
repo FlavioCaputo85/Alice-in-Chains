@@ -1,0 +1,242 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1a0606;
+    color: #f0d9d0;
+    font-family: Georgia, 'Times New Roman', serif;
+    display: flex;
+    justify-content: center;
+}
+
+.pagina {
+    width: 92%;
+    max-width: 980px;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* ---------- ENCARTE (SOBRE MIM) ---------- */
+.encarte {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    background-color: #2b0a0a;
+    border: 3px solid #6e0f0f;
+    padding: 30px;
+    box-shadow: 8px 8px 0 #000;
+}
+
+.capa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 220px;
+}
+
+.foto {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 6px solid #f0d9d0;
+    transform: rotate(-3deg);
+    box-shadow: 4px 4px 0 #000;
+}
+
+.nome {
+    color: #d12a2a;
+    letter-spacing: 3px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.selo {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #c99a90;
+}
+
+.tracklist {
+    flex: 1;
+    min-width: 280px;
+}
+
+.faixa_titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: #d12a2a;
+    border-bottom: 2px solid #6e0f0f;
+    padding-bottom: 10px;
+    margin-bottom: 8px;
+}
+
+.faixa {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px dashed #5a1a1a;
+}
+
+.num {
+    font-family: 'Courier New', monospace;
+    font-size: 26px;
+    color: #8b1a1a;
+    min-width: 36px;
+}
+
+.ano {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #c99a90;
+}
+
+.faixa h3 {
+    font-size: 18px;
+    margin: 2px 0 4px;
+}
+
+.faixa p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #dfc3ba;
+}
+
+/* ---------- QUIZ ---------- */
+.caixa {
+    background-color: #2b0a0a;
+    border: 3px solid #6e0f0f;
+    padding: 30px;
+    box-shadow: 8px 8px 0 #000;
+}
+
+.tela {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+}
+
+.escondido {
+    display: none;
+}
+
+.titulo {
+    color: #d12a2a;
+    letter-spacing: 4px;
+    font-size: 34px;
+    text-shadow: 2px 2px #000;
+}
+
+.subtitulo {
+    color: #c99a90;
+    letter-spacing: 6px;
+    font-weight: normal;
+}
+
+.texto {
+    color: #dfc3ba;
+}
+
+.progresso {
+    color: #c99a90;
+    letter-spacing: 2px;
+}
+
+.pergunta {
+    font-size: 22px;
+    margin: 15px 0;
+}
+
+.opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.opcao {
+    background-color: #3d1010;
+    color: #f0d9d0;
+    border: 1px solid #6e0f0f;
+    padding: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.opcao:hover {
+    background-color: #5c1515;
+}
+
+.certa {
+    background-color: #5a5a3a;
+    border-color: #a8a870;
+}
+
+.errada {
+    background-color: #7a1010;
+    border-color: #d12a2a;
+}
+
+.feedback {
+    margin: 15px 0 5px;
+    color: #dfc3ba;
+}
+
+.botao {
+    background-color: #8b0000;
+    color: #f7e6df;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-family: inherit;
+    letter-spacing: 3px;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background-color: #b01818;
+}
+
+.resultado {
+    font-size: 20px;
+    color: #dfc3ba;
+}
+
+.graficos {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+}
+
+.grafico {
+    background-color: #1f0707;
+    border: 1px solid #6e0f0f;
+    padding: 15px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.status {
+    font-size: 12px;
+    color: #c99a90;
+    margin-top: 8px;
+}

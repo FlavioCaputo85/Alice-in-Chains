@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Alice in Chains - DIRT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- SOBRE MIM: formato de encarte de álbum (capa + tracklist) -->
+    <div class="pagina">
+        <div class="encarte">
+
+            <div class="capa">
+                <img class="foto" src="perfil.png" alt="Foto de perfil">
+                <h1 class="nome">Flávio Sandri</h1>
+                <p class="selo">DEV EM FORMAÇÃO · SÃO PAULO</p>
+            </div>
+
+            <div class="tracklist">
+                <h2 class="faixa_titulo">TRACKLIST · MINHA JORNADA</h2>
+
+                <div class="faixa">
+                    <span class="num">01</span>
+                    <div>
+                        <span class="ano">2020</span>
+                        <h3>Primeiro acorde</h3>
+                        <p>Mexi com software no Windows pela primeira vez e me apaixonei por programação.</p>
+                    </div>
+                </div>
+
+                <div class="faixa">
+                    <span class="num">02</span>
+                    <div>
+                        <span class="ano">2023</span>
+                        <h3>Entrada na Etec</h3>
+                        <p>Comecei o curso de Informática para Internet (ETIM) na Etec.</p>
+                    </div>
+                </div>
+
+                <div class="faixa">
+                    <span class="num">03</span>
+                    <div>
+                        <span class="ano">2024</span>
+                        <h3>Mudança pra São Paulo</h3>
+                        <p>Me mudei para São Paulo e entrei na Etec de Cidade Tiradentes, no mesmo curso, agora na modalidade MTec.</p>
+                    </div>
+                </div>
+
+                <div class="faixa">
+                    <span class="num">04</span>
+                    <div>
+                        <span class="ano">JUL 2026</span>
+                        <h3>SPTech</h3>
+                        <p>Entrei na SPTech. A estrada continua, e este quiz é um dos meus projetos por aqui.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUIZ -->
+        <div class="caixa">
+
+            <div id="tela_inicio" class="tela">
+                <h1 class="titulo">ALICE IN CHAINS</h1>
+                <h2 class="subtitulo">D I R T &nbsp; · &nbsp; QUIZ</h2>
+                <p class="texto">8 perguntas sobre a banda de Seattle. Você aguenta a sujeira?</p>
+                <button class="botao" onclick="iniciar()">COMEÇAR</button>
+            </div>
+
+            <div id="tela_quiz" class="tela escondido">
+                <div id="div_progresso" class="progresso"></div>
+                <div id="div_exibir"></div>
+            </div>
+
+            <div id="tela_dashboard" class="tela escondido">
+                <h1 class="titulo">PLACAR FINAL</h1>
+                <div id="div_resultado" class="resultado"></div>
+
+                <div class="graficos">
+                    <div class="grafico">
+                        <canvas id="canvas_placar"></canvas>
+                    </div>
+                    <div class="grafico">
+                        <canvas id="canvas_sensor"></canvas>
+                        <p id="div_status_api" class="status"></p>
+                    </div>
+                </div>
+
+                <button class="botao" onclick="iniciar()">JOGAR DE NOVO</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
