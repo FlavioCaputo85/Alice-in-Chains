@@ -1,5 +1,9 @@
 <div align="center">
 
+<p align="center">
+  <img src="public/assets/banner.png" alt="Banner do Dirt Quiz" width="100%">
+</p>
+
 # 🩸 DIRT QUIZ
 
 ### Quanto você conhece o Alice in Chains?

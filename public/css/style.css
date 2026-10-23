@@ -1,0 +1,342 @@
+:root {
+    --vinho: #4a1515;
+    --vermelho: #b82828;
+    --branco: #ffffff;
+    --painel: rgba(20, 0, 0, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--branco);
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: linear-gradient(180deg, var(--vinho) 0%, var(--vermelho) 100%);
+    background-attachment: fixed;
+}
+
+.container {
+    width: 90%;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 0 22px;
+    border-bottom: 2px solid var(--branco);
+}
+
+.logo {
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-size: 40px;
+    letter-spacing: 6px;
+    color: var(--branco);
+    text-decoration: none;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.menu a {
+    color: var(--branco);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.ativo {
+    font-weight: bold;
+}
+
+/* ---------- TÍTULOS E TEXTO ---------- */
+h1 {
+    font-size: 52px;
+    text-transform: uppercase;
+}
+
+.texto {
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+.titulo_secao {
+    font-size: 30px;
+    text-transform: uppercase;
+    margin: 20px 0;
+}
+
+/* ---------- BOTÕES ---------- */
+.botao {
+    display: inline-block;
+    background-color: var(--branco);
+    color: var(--vinho);
+    border: 2px solid var(--branco);
+    padding: 12px 34px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background-color: transparent;
+    color: var(--branco);
+}
+
+.botao_vazio {
+    background-color: transparent;
+    color: var(--branco);
+}
+
+.botao_vazio:hover {
+    background-color: var(--branco);
+    color: var(--vinho);
+}
+
+/* ---------- HOME ---------- */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 70px 0;
+}
+
+.capa_album {
+    width: 420px;
+    max-width: 100%;
+    transform: rotate(-15deg);
+    filter: drop-shadow(10px 14px 18px rgba(0, 0, 0, 0.5));
+}
+
+.hero_texto {
+    width: 440px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+
+/* ---------- SOBRE MIM ---------- */
+.sobre {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 30px 0 80px;
+}
+
+.perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 220px;
+}
+
+.foto {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 4px solid var(--branco);
+    transform: rotate(-6deg);
+}
+
+.nome {
+    font-size: 24px;
+    text-align: center;
+}
+
+.selo {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.tracklist {
+    flex: 1;
+    min-width: 280px;
+}
+
+.faixa {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.num {
+    font-size: 30px;
+    font-weight: bold;
+    min-width: 44px;
+}
+
+.ano {
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.faixa h3 {
+    font-size: 18px;
+    text-transform: uppercase;
+    margin: 2px 0 4px;
+}
+
+.faixa p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ---------- QUIZ ---------- */
+.pagina {
+    padding: 50px 0 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.painel {
+    background-color: var(--painel);
+    border: 2px solid var(--branco);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.progresso {
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+.barra {
+    width: 100%;
+    height: 8px;
+    border: 1px solid var(--branco);
+}
+
+.barra_cheia {
+    width: 0%;
+    height: 100%;
+    background-color: var(--branco);
+}
+
+.pergunta {
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+.opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.opcao {
+    background-color: transparent;
+    color: var(--branco);
+    border: 2px solid var(--branco);
+    padding: 14px;
+    font-family: inherit;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.opcao:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.certa {
+    background-color: #2e7d32;
+}
+
+.errada {
+    background-color: #5a0a0a;
+}
+
+.feedback {
+    margin: 14px 0;
+}
+
+/* ---------- DASHBOARD ---------- */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.stat {
+    flex: 1;
+    min-width: 180px;
+    background-color: var(--painel);
+    border: 2px solid var(--branco);
+    padding: 18px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 40px;
+}
+
+.stat span {
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.graficos {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.grafico {
+    flex: 1;
+    min-width: 280px;
+    background-color: var(--painel);
+    border: 2px solid var(--branco);
+    padding: 16px;
+}
+
+.status {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}

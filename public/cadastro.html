@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro · Quiz DIRT</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth">
+        <div class="auth_caixa">
+            <div class="auth_painel">
+                <h1>Entre na<br>sujeira</h1>
+                <p>Crie sua conta para salvar seus placares e acompanhar sua evolução.</p>
+            </div>
+            <div class="auth_form">
+                <h2>Cadastro</h2>
+                <div class="campo">
+                    <label>NOME</label>
+                    <input id="input_nome" type="text" placeholder="Seu nome">
+                </div>
+                <div class="campo">
+                    <label>E-MAIL</label>
+                    <input id="input_email" type="text" placeholder="seu@email.com">
+                </div>
+                <div class="campo">
+                    <label>SENHA (mín. 6 caracteres)</label>
+                    <input id="input_senha" type="password" placeholder="******">
+                </div>
+                <div class="campo">
+                    <label>CONFIRMAR SENHA</label>
+                    <input id="input_confirmacao" type="password" placeholder="******">
+                </div>
+                <div id="div_mensagem" class="mensagem"></div>
+                <button class="botao" onclick="cadastrar()">CRIAR CONTA</button>
+                <p class="link">Já tem conta? <a href="login.html">Entrar</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

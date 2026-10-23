@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início · Quiz DIRT</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">AIC · DIRT QUIZ</div>
+        <div class="nav_dir">
+            <span>Olá, <b id="span_nome"></b></span>
+            <a href="quiz.html">Quiz</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" onclick="sair()">Sair</a>
+        </div>
+    </div>
+
+    <div class="conteudo">
+
+        <div class="hero">
+            <h1>Você aguenta<br>a <span>sujeira?</span></h1>
+            <p>Um quiz sobre o Alice in Chains, com estética inspirada no álbum DIRT (1992). Responda 8 perguntas, salve seu placar e acompanhe seu desempenho em um dashboard com gráficos.</p>
+            <a class="botao" href="quiz.html">COMEÇAR O QUIZ</a>
+        </div>
+
+        <h2 class="secao_titulo">Sobre o projeto</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Quiz de Rock</h3>
+                <p>Perguntas sobre a história, os álbuns e os músicos da banda de Seattle, com feedback a cada resposta.</p>
+            </div>
+            <div class="card">
+                <h3>Dashboard</h3>
+                <p>Gráficos feitos com Chart.js mostram seu último placar e a evolução das suas tentativas, salvas no banco de dados.</p>
+            </div>
+            <div class="card">
+                <h3>API Dat-Acqu-Ino</h3>
+                <p>O dashboard também exibe leituras de um sensor Arduino, obtidas pela API do projeto Dat-Acqu-Ino.</p>
+            </div>
+        </div>
+
+        <h2 class="secao_titulo">Sobre mim</h2>
+        <div class="encarte">
+            <div class="capa">
+                <img class="foto" src="assets/perfil.png" alt="Foto de perfil">
+                <h1 class="nome">SEU NOME</h1>
+                <p class="selo">DEV EM FORMAÇÃO · SÃO PAULO</p>
+            </div>
+            <div class="tracklist">
+                <div class="faixa">
+                    <span class="num">01</span>
+                    <div>
+                        <span class="ano">2020</span>
+                        <h3>Primeiro acorde</h3>
+                        <p>Mexi com software no Windows pela primeira vez e me apaixonei por programação.</p>
+                    </div>
+                </div>
+                <div class="faixa">
+                    <span class="num">02</span>
+                    <div>
+                        <span class="ano">2023</span>
+                        <h3>Entrada na Etec</h3>
+                        <p>Comecei o curso de Informática para Internet (ETIM) na Etec.</p>
+                    </div>
+                </div>
+                <div class="faixa">
+                    <span class="num">03</span>
+                    <div>
+                        <span class="ano">2024</span>
+                        <h3>Mudança pra São Paulo</h3>
+                        <p>Me mudei para São Paulo e entrei na Etec de Cidade Tiradentes, no mesmo curso, agora na modalidade MTec.</p>
+                    </div>
+                </div>
+                <div class="faixa">
+                    <span class="num">04</span>
+                    <div>
+                        <span class="ano">JUL 2026</span>
+                        <h3>SPTech</h3>
+                        <p>Entrei na SPTech. A estrada continua, e este quiz é um dos meus projetos por aqui.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="acoes">
+            <a class="botao" href="quiz.html">BORA PRO QUIZ</a>
+        </div>
+    </div>
+
+    <script src="js/sessao.js"></script>
+    <script>
+        validarSessao();
+        span_nome.innerHTML = sessionStorage.getItem("NOME_USUARIO");
+    </script>
+</body>
+</html>

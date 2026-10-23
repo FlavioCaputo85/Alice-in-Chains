@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · DIRT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <a class="logo" href="index.html">DIRT</a>
+            <div class="menu">
+                <a href="index.html">Home</a>
+                <a href="quiz.html">Quiz</a>
+                <a class="ativo" href="dashboard.html">Dashboard</a>
+            </div>
+        </div>
+
+        <div class="pagina">
+            <h2 class="titulo_secao">Seu placar</h2>
+
+            <div class="stats">
+                <div class="stat"><strong id="kpi_acertos">-</strong><span>ACERTOS</span></div>
+                <div class="stat"><strong id="kpi_erros">-</strong><span>ERROS</span></div>
+                <div class="stat"><strong id="kpi_percentual">-</strong><span>APROVEITAMENTO</span></div>
+                <div class="stat"><strong id="kpi_melhor">-</strong><span>MELHOR PLACAR</span></div>
+            </div>
+
+            <p id="div_frase" class="feedback"></p>
+
+            <div class="graficos">
+                <div class="grafico"><canvas id="canvas_placar"></canvas></div>
+                <div class="grafico"><canvas id="canvas_historico"></canvas></div>
+            </div>
+
+            <div class="graficos">
+                <div class="grafico">
+                    <canvas id="canvas_sensor"></canvas>
+                    <p id="div_status_api" class="status"></p>
+                </div>
+            </div>
+
+            <div class="acoes">
+                <a class="botao" href="quiz.html">Jogar de novo</a>
+                <a class="botao botao_vazio" href="index.html">Voltar ao início</a>
+            </div>
+        </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
