@@ -8,7 +8,7 @@
 
 ### Quanto você conhece o Alice in Chains?
 
-*Um quiz interativo de rock com visual inspirado no álbum **DIRT** (1992), dashboard com Chart.js e dados de um sensor Arduino.*
+*Um quiz interativo de rock com visual inspirado no álbum **DIRT** (1992).*
 
 ![HTML5](https://img.shields.io/badge/HTML5-b82828?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-4a1515?style=for-the-badge&logo=css3&logoColor=white)
