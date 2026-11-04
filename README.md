@@ -1,10 +1,7 @@
-# 🎸 Alice in Chains · Quiz
+# Alice in Chains · Quiz
 
 Projeto individual (SPTech): um quiz sobre as músicas de **Facelift**, **Dirt** e **Jar of Flies**, com login, ranking e dashboard em Chart.js.
 Feito em cima do projeto base **web-data-viz** (Node.js + Express + MySQL), mantendo a arquitetura dele.
-
-> A lista completa do que foi **tirado ou trocado** do código original está em [`ALTERACOES.md`](./ALTERACOES.md).
-> No código, cada mudança tem um comentário `ALTERADO:` ou `ADICIONADO:`.
 
 ## O que o site tem
 
@@ -43,12 +40,6 @@ public/ (HTML, CSS, JS)  --fetch-->  src/routes  ->  src/controllers  ->  src/mo
    npm start
    ```
 4. Abra `http://localhost:3333`.
-
-### Imagens (opcional, mas recomendado)
-- Foto de perfil: `public/assets/imgs/perfil.png`
-- Capas dos álbuns: `public/assets/imgs/albuns/facelift.jpg`, `dirt.jpg` e `jarofflies.jpg`.
-
-Se as capas não existirem, o site mostra um quadrado colorido com o nome do álbum.
 
 ## Tecnologias
 HTML, CSS, JavaScript, Node.js, Express, MySQL e Chart.js.
