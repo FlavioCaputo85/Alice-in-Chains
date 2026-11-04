@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/icon/favicon2.ico">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/estilo.css">
+    <link rel="stylesheet" href="../css/albuns.css">
+    <!-- ADICIONADO: página nova do quiz (ocupa o lugar do cards.html, que era do AquaTech) -->
+    <title>Alice in Chains | Quiz</title>
+</head>
+
+<body>
+    <script src="../js/tema.js"></script>
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo">Alice in Chains</h1>
+            <ul class="navbar">
+                <li><a href="../index.html">Início</a></li>
+                <li class="agora"><a href="#">Quiz</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li>|</li>
+                <li class="hello-nav">Olá, <b id="b_usuario">usuário</b></li>
+                <li><a href="#" onclick="limparSessao()">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina">
+
+        <div id="div_niveis">
+            <h2>Escolha o nível</h2>
+            <p class="sub">Cada nível tem 8 perguntas sobre as músicas de Facelift, Dirt e Jar of Flies.</p>
+            <br>
+            <div class="niveis">
+                <button class="nivel" onclick="escolherNivel('facil')">
+                    <strong>Fácil</strong>
+                    <span>10 pontos por acerto</span>
+                </button>
+                <button class="nivel" onclick="escolherNivel('medio')">
+                    <strong>Médio</strong>
+                    <span>20 pontos por acerto</span>
+                </button>
+                <button class="nivel" onclick="escolherNivel('dificil')">
+                    <strong>Difícil</strong>
+                    <span>30 pontos por acerto</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="div_jogo" class="painel escondido">
+            <div id="div_progresso" class="progresso"></div>
+            <div class="barra"><div id="barra_cheia" class="barra_cheia"></div></div>
+            <div id="div_exibir"></div>
+        </div>
+
+        <div id="div_fim" class="painel fim escondido"></div>
+    </div>
+
+    <script src="../js/quiz.js"></script>
+</body>
+
+</html>

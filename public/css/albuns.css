@@ -1,0 +1,630 @@
+/* =====================================================================
+   ADICIONADO: albuns.css  (visual novo do site)
+   Tudo que é do tema por álbum, das animações e das telas novas
+   (home, quiz e dashboard) fica aqui. O estilo.css continua sendo o
+   "padrão" do site; este arquivo só muda as cores e acrescenta telas.
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   1) VARIÁVEIS DE COR
+   Eu usei @property para o navegador conseguir ANIMAR a troca de cor.
+   Sem o @property, o CSS não anima variáveis: a cor trocaria de uma vez.
+   Registrei só as variáveis de cor que eu quero animar suavemente.
+   --------------------------------------------------------------------- */
+@property --fundo-1 { syntax: '<color>'; inherits: true; initial-value: #121212; }
+@property --fundo-2 { syntax: '<color>'; inherits: true; initial-value: #2e2e2e; }
+@property --destaque { syntax: '<color>'; inherits: true; initial-value: #c9c9c9; }
+@property --botao { syntax: '<color>'; inherits: true; initial-value: #8b2323; }
+
+/* tema padrão (cinza grunge): aparece quando nenhum álbum foi escolhido */
+:root {
+  --fundo-1: #121212;
+  --fundo-2: #2e2e2e;
+  --destaque: #c9c9c9;
+  --botao: #8b2323;
+  --botao-texto: #ffffff;
+  --texto: #f2f2f2;
+  --card: #ece7e1;
+  --painel: rgba(0, 0, 0, 0.35);
+}
+
+/* Eu usei TRANSITION no body: quando a classe do tema muda (tema-dirt, etc.),
+   as 4 variáveis acima mudam de valor devagar (0.8s) em vez de pular. */
+html {
+  min-height: 100%;
+}
+
+body {
+  transition: --fundo-1 0.8s ease, --fundo-2 0.8s ease, --destaque 0.8s ease, --botao 0.8s ease;
+}
+
+/* Os 3 temas. O JavaScript (js/tema.js) coloca uma destas classes no <body>. */
+body.tema-facelift {            /* Facelift: preto com mostarda/dourado */
+  --fundo-1: #15110a;
+  --fundo-2: #6b5410;
+  --destaque: #e0b73a;
+  --botao: #b8901c;
+  --botao-texto: #1a1405;
+  --texto: #fff6dc;
+  --card: #f5edd6;
+}
+
+body.tema-dirt {                /* Dirt: vinho para vermelho (igual ao meu layout da home) */
+  --fundo-1: #4a1515;
+  --fundo-2: #b82828;
+  --destaque: #ffb199;
+  --botao: #8b0000;
+  --botao-texto: #ffffff;
+  --texto: #ffffff;
+  --card: #f6e9e4;
+}
+
+body.tema-jarofflies {          /* Jar of Flies: azul petróleo acinzentado */
+  --fundo-1: #0e2630;
+  --fundo-2: #3e7f8c;
+  --destaque: #bfe3e0;
+  --botao: #2f6f7a;
+  --botao-texto: #ffffff;
+  --texto: #eef9f8;
+  --card: #e6f1f0;
+}
+
+
+/* ---------------------------------------------------------------------
+   2) ANIMAÇÕES (todas simples)
+   --------------------------------------------------------------------- */
+
+/* ANIMAÇÃO 1: "aparecer" -> o elemento sobe 20px e vai ficando visível.
+   Uso em: cards dos álbuns, painel de informações e caixas de cada tela.
+   Como funciona: @keyframes define o começo (from) e o fim (to) e eu
+   aplico com a propriedade "animation". O animation-delay faz os 3 cards
+   entrarem um depois do outro. */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ANIMAÇÃO 2: "pulsar" -> o brilho do álbum selecionado aumenta e diminui. */
+@keyframes pulsar {
+  0%, 100% { box-shadow: 0 0 10px var(--destaque); }
+  50%      { box-shadow: 0 0 28px var(--destaque); }
+}
+
+/* ANIMAÇÃO 3: "tremer" -> usada na resposta errada do quiz. */
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-8px); }
+  75%      { transform: translateX(8px); }
+}
+
+/* ANIMAÇÃO 4: "brilhar" -> usada na resposta certa do quiz (cresce e volta). */
+@keyframes brilhar {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+
+
+/* ---------------------------------------------------------------------
+   3) HOME
+   --------------------------------------------------------------------- */
+
+/* Eu sobrescrevo o .banner do estilo.css: lá ele tinha altura fixa e só um
+   texto. Aqui ele cresce conforme o conteúdo (cards + painel do álbum). */
+.banner {
+  height: auto;
+  min-height: var(--tamanho-banner);
+  padding: 50px 0;
+}
+
+.banner .container {
+  flex-direction: column;
+  gap: 18px;
+  height: auto;
+  text-align: center;
+}
+
+.banner .container p {
+  width: 70%;
+  font-size: 18px;
+}
+
+.sobretitulo {
+  letter-spacing: 4px;
+  color: var(--destaque);
+  font-size: 14px !important;
+}
+
+.banner h2 {
+  margin: 0;
+  font-size: 44px;
+  text-transform: uppercase;
+}
+
+.albuns {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.album {
+  width: 220px;
+  cursor: pointer;
+  /* ANIMAÇÃO 1 aplicada: o card entra subindo */
+  animation: aparecer 0.7s ease both;
+  /* TRANSITION: o hover (subir e crescer) acontece suave em 0.3s */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* cada card espera um pouco mais que o anterior para aparecer */
+.album:nth-child(1) { animation-delay: 0.1s; }
+.album:nth-child(2) { animation-delay: 0.3s; }
+.album:nth-child(3) { animation-delay: 0.5s; }
+
+/* HOVER: o card sobe 8px e cresce um pouco quando passo o mouse */
+.album:hover {
+  transform: translateY(-8px) scale(1.04);
+}
+
+/* álbum escolhido: ganha borda e a ANIMAÇÃO 2 (pulsar) */
+.album.selecionado {
+  outline: 3px solid var(--destaque);
+  animation: pulsar 2s ease-in-out infinite;
+}
+
+/* A "capa": um quadrado colorido com o nome do álbum.
+   Se a imagem existir (assets/imgs/albuns/...), ela cobre o quadrado. */
+.capa {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+.capa img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capa span {
+  position: relative;
+  font-size: 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 6px #000;
+}
+
+.capa-facelift { background: linear-gradient(135deg, #15110a, #b8901c); }
+.capa-dirt { background: linear-gradient(135deg, #4a1515, #d0451b); }
+.capa-jarofflies { background: linear-gradient(135deg, #0e2630, #7fb5bd); }
+
+.album-nome {
+  background-color: var(--painel);
+  padding: 10px;
+  font-weight: 600;
+}
+
+.album-info {
+  width: 70%;
+  background-color: var(--painel);
+  border: 2px solid var(--destaque);
+  padding: 24px;
+  min-height: 60px;
+  /* a ANIMAÇÃO 1 toca de novo toda vez que o JavaScript troca o conteúdo,
+     porque o innerHTML cria elementos novos */
+  animation: aparecer 0.6s ease both;
+}
+
+.album-info h3 {
+  margin: 0 0 8px;
+  color: var(--destaque);
+  font-size: 26px;
+  text-transform: uppercase;
+}
+
+.album-info p {
+  width: 100% !important;
+  font-size: 16px !important;
+}
+
+.faixas {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.faixa-chip {
+  border: 2px solid var(--destaque);
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+.faixa-chip.fav {
+  background-color: var(--destaque);
+  color: #111;
+  font-weight: 700;
+}
+
+/* botão de link (usa as cores do tema) */
+.btn-link {
+  display: inline-block;
+  background-color: var(--botao);
+  color: var(--botao-texto);
+  padding: 12px 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--botao-texto);
+  transition: transform 0.2s ease;
+}
+
+.btn-link:hover {
+  transform: scale(1.06);
+}
+
+.btn-link.vazio {
+  background-color: transparent;
+  color: var(--texto);
+  border-color: var(--destaque);
+}
+
+/* "Como funciona" (reaproveitei a seção .social do estilo.css).
+   No estilo.css ela é display:flex em linha; aqui coloco em coluna para o título ficar em cima. */
+.social {
+  color: var(--texto);
+  flex-direction: column;
+}
+
+.social h3.secao {
+  text-align: center;
+  margin: 30px 0 0;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.social .box {
+  width: 30%;
+  text-align: center;
+}
+
+.social .box .numero {
+  font-size: 54px;
+  font-weight: 800;
+  color: var(--destaque);
+}
+
+/* SOBRE MIM */
+.sobre-mim .container {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 50px 0;
+  color: var(--texto);
+}
+
+.perfil {
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.perfil img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border: 4px solid var(--destaque);
+  transform: rotate(-4deg);
+  transition: transform 0.4s ease;
+}
+
+.perfil img:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.perfil h3 {
+  margin: 0;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+.perfil small {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.jornada {
+  flex: 1;
+  min-width: 280px;
+}
+
+.jornada h3.secao {
+  margin: 0 0 10px;
+  font-size: 28px;
+  text-transform: uppercase;
+  color: var(--destaque);
+}
+
+.etapa {
+  display: flex;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--destaque);
+}
+
+.etapa .num {
+  font-size: 30px;
+  font-weight: 800;
+  min-width: 44px;
+  color: var(--destaque);
+}
+
+.etapa .ano {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.etapa h4 {
+  margin: 2px 0 4px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.etapa p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.jornada .favoritas {
+  margin-top: 20px;
+}
+
+
+/* ---------------------------------------------------------------------
+   4) PÁGINAS INTERNAS (quiz e dashboard)
+   --------------------------------------------------------------------- */
+.pagina {
+  width: 80%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 0 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--texto);
+}
+
+.pagina h2 {
+  margin: 0;
+  font-size: 34px;
+  text-transform: uppercase;
+}
+
+.pagina .sub {
+  margin: 0;
+}
+
+.painel {
+  background-color: var(--painel);
+  border: 2px solid var(--destaque);
+  padding: 26px;
+  animation: aparecer 0.6s ease both;
+}
+
+/* escolha de nível */
+.niveis {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.nivel {
+  flex: 1;
+  min-width: 220px;
+  background-color: var(--painel);
+  border: 2px solid var(--destaque);
+  color: var(--texto);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.nivel:hover {
+  transform: translateY(-6px);
+  background-color: var(--botao);
+  color: var(--botao-texto);
+}
+
+.nivel strong {
+  display: block;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+/* quiz */
+.progresso {
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.barra {
+  width: 100%;
+  height: 10px;
+  border: 1px solid var(--destaque);
+  margin: 10px 0 20px;
+}
+
+.barra_cheia {
+  width: 0%;
+  height: 100%;
+  background-color: var(--destaque);
+  /* TRANSITION: a barra de progresso cresce suave ao avançar de pergunta */
+  transition: width 0.5s ease;
+}
+
+.pergunta {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+
+.opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opcao {
+  background-color: transparent;
+  color: var(--texto);
+  border: 2px solid var(--destaque);
+  padding: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.opcao:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  padding-left: 22px;   /* o texto "anda" um pouco para a direita no hover */
+}
+
+/* resposta certa -> verde + ANIMAÇÃO 4 (brilhar) */
+.opcao.certa {
+  background-color: #2e7d32;
+  border-color: #7ddc6a;
+  animation: brilhar 0.5s ease;
+}
+
+/* resposta errada -> vermelha + ANIMAÇÃO 3 (tremer) */
+.opcao.errada {
+  background-color: #7a1010;
+  border-color: #ff6b6b;
+  animation: tremer 0.4s ease;
+}
+
+.feedback {
+  margin: 16px 0 6px;
+}
+
+/* resultado final do quiz */
+.fim h2 {
+  color: var(--destaque);
+}
+
+.fim .pontos {
+  font-size: 60px;
+  font-weight: 800;
+}
+
+/* dashboard */
+.kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.kpi {
+  flex: 1;
+  min-width: 280px;   /* 3 KPIs por linha */
+  background-color: var(--painel);
+  border: 2px solid var(--destaque);
+  border-bottom: 5px solid var(--botao);
+  padding: 16px;
+  text-align: center;
+  animation: aparecer 0.6s ease both;
+}
+
+.kpi strong {
+  display: block;
+  font-size: 38px;
+}
+
+.kpi span {
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.kpi small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.graficos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.grafico {
+  flex: 1;
+  min-width: 300px;
+  background-color: var(--painel);
+  border: 2px solid var(--destaque);
+  padding: 16px;
+  animation: aparecer 0.6s ease both;
+}
+
+.acoes {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hello-nav {
+  color: var(--texto);
+}
+
+/* esconde o item "Sair" até o JavaScript mostrar */
+.escondido {
+  display: none;
+}
+
+/* celular: coloco os blocos um embaixo do outro */
+@media (max-width: 800px) {
+  .banner .container p,
+  .album-info {
+    width: 100%;
+  }
+
+  .social .container .boxes {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .social .box {
+    width: 100%;
+  }
+
+  .header .container {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 0;
+  }
+}

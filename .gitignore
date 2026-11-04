@@ -1,0 +1,20 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Variáveis de ambiente (têm senha do banco)
+.env
+.env.dev
+
+# Documentos de apoio do professor
+DOCUMENTOS_DE_APOIO/
+
+# Sistema e editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

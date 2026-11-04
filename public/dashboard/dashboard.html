@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/icon/favicon2.ico">
+    <script src="../js/sessao.js"></script>
+    <link rel="stylesheet" href="../css/estilo.css">
+    <link rel="stylesheet" href="../css/albuns.css">
+    <!-- ALTERADO: a página inteira foi trocada (era o dashboard de temperatura do AquaTech) -->
+    <title>Alice in Chains | Dashboard</title>
+
+    <!-- scripts do Chart.js (mantive a mesma linha do dashboard original) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <script src="../js/tema.js"></script>
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo">Alice in Chains</h1>
+            <ul class="navbar">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li class="agora"><a href="#">Dashboard</a></li>
+                <li>|</li>
+                <li class="hello-nav">Olá, <b id="b_usuario">usuário</b></li>
+                <li><a href="#" onclick="limparSessao()">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina">
+        <h2>Seu desempenho</h2>
+        <p id="div_aviso" class="sub"></p>
+
+        <div class="kpis">
+            <div class="kpi"><strong id="kpi_partidas">-</strong><span>Partidas jogadas</span></div>
+            <div class="kpi"><strong id="kpi_media">-</strong><span>Média de pontos</span><small id="kpi_media_geral"></small></div>
+            <div class="kpi"><strong id="kpi_melhor">-</strong><span>Melhor partida</span></div>
+            <div class="kpi"><strong id="kpi_pior">-</strong><span>Menor pontuação</span></div>
+            <div class="kpi"><strong id="kpi_posicao">-</strong><span>Posição no ranking</span></div>
+            <div class="kpi"><strong id="kpi_album">-</strong><span>Álbum que você mais domina</span><small id="kpi_album_detalhe"></small></div>
+        </div>
+
+        <div class="graficos">
+            <div class="grafico"><canvas id="grafico_evolucao"></canvas></div>
+            <div class="grafico"><canvas id="grafico_albuns"></canvas></div>
+        </div>
+
+        <div class="graficos">
+            <div class="grafico"><canvas id="grafico_ranking"></canvas></div>
+        </div>
+
+        <div class="acoes">
+            <a class="btn-link" href="quiz.html">Jogar de novo</a>
+            <a class="btn-link vazio" href="../index.html">Voltar ao início</a>
+        </div>
+    </div>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+
+</html>
