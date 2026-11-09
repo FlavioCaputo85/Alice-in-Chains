@@ -1,6 +1,3 @@
--- ALTERADO: este arquivo era o script do AquaTech (empresa, usuario, aviso, aquario, medida).
--- Troquei pelas tabelas do quiz de Alice in Chains. Execute tudo no MySQL antes de rodar o site.
-
 CREATE DATABASE quiz_aic;
 
 USE quiz_aic;
