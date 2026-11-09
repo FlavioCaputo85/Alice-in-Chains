@@ -5,32 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- ALTERADO: o título era "AquaTech | Página Inicial" -->
     <title>Alice in Chains | Quiz</title>
 
     <script src="./js/sessao.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
-    <!-- ADICIONADO: css novo com os temas por álbum e as animações -->
     <link rel="stylesheet" href="./css/albuns.css">
-    <link rel="icon" href="./assets/icon/favicon2.ico">
+    <link rel="icon" href="./assets/icon/logo2.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
 <body>
-    <!-- ADICIONADO: aplica o tema escolhido antes da página aparecer -->
     <script src="./js/tema.js"></script>
 
     <div class="header">
         <div class="container">
-            <!-- ALTERADO: o texto era "AquaTech" -->
             <h1 class="titulo">Alice in Chains</h1>
             <ul class="navbar">
                 <li class="agora">
                     <a href="#">Início</a>
                 </li>
-                <!-- ALTERADO: o link "Simulador" (simulador.html) virou "Quiz" e adicionei "Dashboard" -->
                 <li>
                     <a href="dashboard/quiz.html">Quiz</a>
                 </li>
@@ -44,7 +38,7 @@
                 <li id="li_cadastro">
                     <a href="cadastro.html">Cadastro</a>
                 </li>
-                <!-- ADICIONADO: "Sair" só aparece quando tem usuário logado -->
+                <!--"Sair" só aparece quando tem usuário logado -->
                 <li id="li_sair" class="escondido">
                     <a href="#" onclick="sairDaConta()">Sair</a>
                 </li>
@@ -52,19 +46,15 @@
         </div>
     </div>
 
-    <!-- ALTERADO: o banner tinha só a frase "Preservando hoje para existirem amanhã".
-         Agora ele explica o site e mostra os 3 álbuns. -->
     <div class="banner">
         <div class="container">
             <p class="sobretitulo">QUIZ · ROCK · DASHBOARD</p>
             <h2>Facelift · Dirt · Jar of Flies</h2>
-            <p>Teste o quanto você conhece as músicas de três álbuns do Alice in Chains. Escolha um álbum abaixo
-                (o site muda de cara!), jogue o quiz nos níveis fácil, médio ou difícil e depois veja o seu
+            <p>Teste o quanto você conhece as músicas de três álbuns do Alice in Chains. Escolha um álbum abaixo, jogue o quiz nos níveis fácil, médio ou difícil e depois veja o seu
                 desempenho no dashboard.</p>
 
             <div class="albuns">
-                <!-- Se existir a imagem em assets/imgs/albuns/, ela aparece em cima do quadrado colorido.
-                     Se não existir, o onerror esconde a imagem e fica só o quadrado colorido com o nome. -->
+                <!-- estudar essa parte -->
                 <div id="card_facelift" class="album" onclick="escolherAlbum('facelift')">
                     <div class="capa capa-facelift">
                         <img src="assets/imgs/albuns/facelift.jpg" alt="Capa do álbum Facelift"
@@ -82,7 +72,6 @@
                     </div>
                     <div class="album-nome">1992</div>
                 </div>
-
                 <div id="card_jarofflies" class="album" onclick="escolherAlbum('jarofflies')">
                     <div class="capa capa-jarofflies">
                         <img src="assets/imgs/albuns/jarofflies.jpg" alt="Capa do EP Jar of Flies"
@@ -97,8 +86,6 @@
         </div>
     </div>
 
-    <!-- ALTERADO: esta seção era "Missão, Visão e Valores" (com imagens e Lorem ipsum).
-         Agora explica como o site funciona. -->
     <div class="social">
         <h3 class="secao">Como funciona</h3>
         <div class="container">
@@ -122,7 +109,7 @@
         </div>
     </div>
 
-    <!-- ADICIONADO: seção "Sobre mim" -->
+    <!--seção "Sobre mim" -->
     <div class="sobre-mim">
         <div class="container">
             <div class="perfil">
@@ -187,8 +174,7 @@
 
     <div class="footer">
         <div class="container">
-            <!-- ALTERADO: o texto era "Feito com amor por aluno ♥ SPTech © 2023-2026" -->
-            <h4>Feito com amor por Flávio &hearts; SPTech &copy; 2026</h4>
+            <h4>Feito por Flávio - SPTech 2026</h4>
         </div>
     </div>
 

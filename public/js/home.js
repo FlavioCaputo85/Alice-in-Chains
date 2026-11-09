@@ -1,5 +1,3 @@
-// ADICIONADO: home.js -> lógica da página inicial (escolher álbum e mostrar informações)
-
 // Dados dos 3 álbuns. Os destaques são músicas que existem em cada um deles.
 let albuns = {
     facelift: {
@@ -67,7 +65,6 @@ function mostrarInfo(chave) {
         <h3>${album.nome} · ${album.ano}</h3>
         <p>${album.resumo}</p>
         <div class="faixas">${chips}</div>
-        <p><small>Em destaque: as músicas que o Flávio mais gosta</small></p>
         <a class="btn-link" href="dashboard/quiz.html">Jogar o quiz</a>
     `;
 }
@@ -91,7 +88,7 @@ function iniciarHome() {
         marcarCard(salvo);
         mostrarInfo(salvo);
     } else {
-        div_album_info.innerHTML = "<p>👆 Clique em um álbum para mudar a cara do site.</p>";
+        div_album_info.innerHTML = "<p>Clique em um álbum para mudar a cara do site.</p>";
     }
 }
 
