@@ -10,11 +10,13 @@
     <title>Alice in Chains | Login</title>
 
     <script src="./js/sessao.js"></script>
+    <!-- ADICIONADO: validações de e-mail e senha -->
+    <script src="./js/validacao.js"></script>
 
     <link rel="stylesheet" href="./css/estilo.css">
     <!-- ADICIONADO: css dos temas por álbum -->
     <link rel="stylesheet" href="./css/albuns.css">
-    <link rel="icon" href="./assets/icon/logo2.png">
+    <link rel="icon" href="./assets/icon/favicon2.ico">
     <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
@@ -107,6 +109,16 @@
         }
         else {
             setInterval(sumirMensagem, 5000)
+        }
+
+        // ADICIONADO: confere o formato do e-mail e se a senha não tem caractere proibido (js/validacao.js)
+        let erroValidacao = validarLogin(emailVar, senhaVar);
+
+        if (erroValidacao != "") {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = erroValidacao;
+            finalizarAguardar();
+            return false;
         }
 
         console.log("FORM LOGIN: ", emailVar);

@@ -1,5 +1,7 @@
 var usuarioModel = require("../models/usuarioModel");
 var aquarioModel = require("../models/aquarioModel");
+// ADICIONADO: as mesmas validações do navegador, agora também no servidor
+var validacao = require("../../public/js/validacao.js");
 
 function autenticar(req, res) {
     var email = req.body.emailServer;
@@ -9,6 +11,9 @@ function autenticar(req, res) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está indefinida!");
+    } else if (validacao.validarLogin(String(email), String(senha)) != "") {
+        // ADICIONADO: valida e-mail e senha no servidor (o navegador pode ser burlado)
+        res.status(400).send(validacao.validarLogin(String(email), String(senha)));
     } else {
 
         usuarioModel.autenticar(email, senha)
@@ -59,6 +64,9 @@ function cadastrar(req, res) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
+    } else if (validacao.validarCadastro(String(nome), String(email), String(senha), String(senha)) != "") {
+        // ADICIONADO: valida nome, e-mail e senha segura no servidor (o navegador pode ser burlado)
+        res.status(400).send(validacao.validarCadastro(String(nome), String(email), String(senha), String(senha)));
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
@@ -74,7 +82,13 @@ function cadastrar(req, res) {
                         "\nHouve um erro ao realizar o cadastro! Erro: ",
                         erro.sqlMessage
                     );
-                    res.status(500).json(erro.sqlMessage);
+
+                    // ADICIONADO: e-mail repetido (a coluna email é UNIQUE no banco)
+                    if (erro.code == "ER_DUP_ENTRY") {
+                        res.status(409).send("Esse e-mail já está cadastrado.");
+                    } else {
+                        res.status(500).json(erro.sqlMessage);
+                    }
                 }
             );
     }
@@ -83,4 +97,4 @@ function cadastrar(req, res) {
 module.exports = {
     autenticar,
     cadastrar
-}
+} 

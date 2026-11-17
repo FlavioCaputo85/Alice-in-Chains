@@ -10,11 +10,13 @@
   <title>Alice in Chains | Cadastro</title>
 
   <script src="./js/sessao.js"></script>
+  <!-- ADICIONADO: validações de nome, e-mail e senha -->
+  <script src="./js/validacao.js"></script>
 
   <link rel="stylesheet" href="./css/estilo.css" />
   <!-- ADICIONADO: css dos temas por álbum -->
   <link rel="stylesheet" href="./css/albuns.css" />
-  <link rel="icon" href="./assets/icon/logo2.png" />
+  <link rel="icon" href="./assets/icon/favicon2.ico" />
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
@@ -68,11 +70,15 @@
           </div>
           <div class="campo">
             <span>E-mail:</span>
-            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+            <input id="email_input" type="text" placeholder="meuemail@provedor.com" onkeyup="mostrarMsgEmail()" />
+            <!-- ADICIONADO: mensagem ao vivo do e-mail -->
+            <div id="div_msg_email" class="regras-senha"></div>
           </div>
           <div class="campo">
             <span>Senha:</span>
-            <input id="senha_input" type="password" placeholder="******" />
+            <input id="senha_input" type="password" placeholder="******" onkeyup="mostrarRegrasSenha()" />
+            <!-- ADICIONADO: checklist ao vivo das regras da senha -->
+            <div id="div_regras_senha" class="regras-senha"></div>
           </div>
           <div class="campo">
             <span>Confirmação da Senha:</span>
@@ -104,6 +110,35 @@
 
   // ALTERADO: tirei o array listaEmpresasCadastradas (era para validar o código de ativação da empresa)
 
+  // ADICIONADO: mostra, enquanto a pessoa digita, o que ainda falta no e-mail
+  function mostrarMsgEmail() {
+    let erro = validarEmail(email_input.value);
+
+    if (email_input.value == "") {
+      div_msg_email.innerHTML = "";
+    } else if (erro == "") {
+      div_msg_email.innerHTML = '<span class="regra-ok">✔ E-mail válido</span>';
+    } else {
+      div_msg_email.innerHTML = '<span class="regra-erro">✖ ' + erro + '</span>';
+    }
+  }
+
+  // ADICIONADO: mostra o checklist das regras da senha (um "for" desenha cada linha)
+  function mostrarRegrasSenha() {
+    let regras = regrasDaSenha(senha_input.value);
+    let html = "";
+
+    for (let i = 0; i < regras.length; i++) {
+      if (regras[i].ok == true) {
+        html += '<div class="regra-ok">✔ ' + regras[i].texto + '</div>';
+      } else {
+        html += '<div class="regra-erro">✖ ' + regras[i].texto + '</div>';
+      }
+    }
+
+    div_regras_senha.innerHTML = html;
+  }
+
   function cadastrar() {
     // aguardar();
 
@@ -130,6 +165,17 @@
       return false;
     } else {
       setInterval(sumirMensagem, 5000);
+    }
+
+    // ADICIONADO: valida nome, e-mail, senha segura e confirmação (js/validacao.js)
+    let erroValidacao = validarCadastro(nomeVar, emailVar, senhaVar, confirmacaoSenhaVar);
+
+    if (erroValidacao != "") {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = erroValidacao;
+
+      finalizarAguardar();
+      return false;
     }
 
     // ALTERADO: tirei o for que verificava o código de ativação de empresas
@@ -165,7 +211,19 @@
           limparFormulario();
           finalizarAguardar();
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          // ALTERADO: antes era só um throw. Agora mostro a mensagem que o servidor mandou
+          // (por exemplo: "Esse e-mail já está cadastrado.").
+          resposta.text().then(function (texto) {
+            cardErro.style.display = "block";
+
+            if (resposta.status == 400 || resposta.status == 409) {
+              mensagem_erro.innerHTML = texto;
+            } else {
+              mensagem_erro.innerHTML = "Houve um erro ao tentar realizar o cadastro!";
+            }
+
+            finalizarAguardar();
+          });
         }
       })
       .catch(function (resposta) {

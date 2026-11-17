@@ -628,3 +628,21 @@ body.tema-jarofflies {          /* Jar of Flies: azul petróleo acinzentado */
     padding: 10px 0;
   }
 }
+
+
+/* ADICIONADO: checklist ao vivo da senha e mensagem do e-mail (cadastro.html) */
+.regras-senha {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 4px 0 8px;
+  text-align: left;
+}
+
+.regra-ok {
+  color: #1b5e20;
+  font-weight: 600;
+}
+
+.regra-erro {
+  color: #8b0000;
+}
