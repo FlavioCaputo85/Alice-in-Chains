@@ -1,4 +1,3 @@
-// Dados dos 3 álbuns. Os destaques são músicas que existem em cada um deles.
 let albuns = {
     facelift: {
         nome: "Facelift",
@@ -20,18 +19,15 @@ let albuns = {
     }
 };
 
-// As músicas que eu mais gosto (ficam com destaque nos botões)
 let favoritas = ["Man in the Box", "Bleed the Freak", "Them Bones", "Junkhead", "Rain When I Die",
     "Dam That River", "Down in a Hole", "Nutshell", "Rotten Apple"];
 
-// Chamada quando clico num card de álbum
 function escolherAlbum(chave) {
-    aplicarTema(chave);               // troca a estética (js/tema.js)
-    marcarCard(chave);                // destaca o card escolhido
-    mostrarInfo(chave);               // mostra o painel com as informações
+    aplicarTema(chave);               
+    marcarCard(chave);                
+    mostrarInfo(chave);
 }
 
-// Tira a marcação de todos os cards e coloca só no escolhido
 function marcarCard(chave) {
     card_facelift.className = "album";
     card_dirt.className = "album";
@@ -50,7 +46,6 @@ function mostrarInfo(chave) {
     let album = albuns[chave];
     let chips = "";
 
-    // monta um botão para cada música destaque (as favoritas ganham a classe "fav")
     for (let i = 0; i < album.destaques.length; i++) {
         let classe = "faixa-chip";
 
@@ -69,7 +64,6 @@ function mostrarInfo(chave) {
     `;
 }
 
-// Menu: se tem usuário logado, esconde Login/Cadastro e mostra Sair
 function ajustarMenu() {
     if (sessionStorage.NOME_USUARIO != undefined) {
         li_login.className = "escondido";
@@ -78,7 +72,6 @@ function ajustarMenu() {
     }
 }
 
-// Ao abrir a home: se já escolhi um álbum antes, mostra ele
 function iniciarHome() {
     ajustarMenu();
 

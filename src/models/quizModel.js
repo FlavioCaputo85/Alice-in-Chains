@@ -1,5 +1,3 @@
-// ADICIONADO: aqui ficam os comandos SQL do quiz.
-// Os valores que entram nos comandos (ids, nível, álbum) são validados no controller antes de chegar aqui.
 let database = require("../database/config");
 
 function salvarTentativa(idUsuario, nivel, acertos, total, pontos) {
@@ -11,7 +9,6 @@ function salvarTentativa(idUsuario, nivel, acertos, total, pontos) {
     return database.executar(instrucaoSql);
 }
 
-// valores já vem montado: (1, 'dirt', 1), (1, 'facelift', 0), ...
 function salvarRespostas(valores) {
     let instrucaoSql = `
         INSERT INTO resposta (fk_tentativa, album, acertou) VALUES ${valores};
@@ -20,7 +17,6 @@ function salvarRespostas(valores) {
     return database.executar(instrucaoSql);
 }
 
-// KPIs do usuário: COUNT, AVG, MAX, MIN, SUM e a posição no ranking
 function buscarKpis(idUsuario) {
     let instrucaoSql = `
         SELECT
@@ -42,7 +38,6 @@ function buscarKpis(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
-// últimas 8 partidas (para o gráfico de linha)
 function buscarEvolucao(idUsuario) {
     let instrucaoSql = `
         SELECT pontos, DATE_FORMAT(momento, '%d/%m %H:%i') AS momento_grafico
@@ -54,7 +49,6 @@ function buscarEvolucao(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
-// % de acerto por álbum (AVG de acertou, que vale 0 ou 1)
 function buscarAlbuns(idUsuario) {
     let instrucaoSql = `
         SELECT r.album, ROUND(AVG(r.acertou) * 100, 0) AS aproveitamento
@@ -67,7 +61,6 @@ function buscarAlbuns(idUsuario) {
     return database.executar(instrucaoSql);
 }
 
-// ranking geral: top 5 por soma de pontos
 function buscarRanking() {
     let instrucaoSql = `
         SELECT u.nome, SUM(t.pontos) AS total_pontos

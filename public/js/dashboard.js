@@ -1,16 +1,12 @@
-// ADICIONADO: dashboard.js -> busca os dados no MySQL (via API) e monta KPIs + gráficos (Chart.js)
-
 validarSessao();
 
 let idUsuario = sessionStorage.ID_USUARIO;
 let nomesAlbuns = { facelift: "Facelift", dirt: "Dirt", jarofflies: "Jar of Flies" };
 let chavesAlbuns = ["facelift", "dirt", "jarofflies"];
 
-// cores padrão dos gráficos (texto claro, porque o fundo do site é escuro)
 Chart.defaults.color = "#ffffff";
 Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)";
 
-// pega a cor de destaque do tema atual (a mesma variável do CSS)
 function corDestaque() {
     let cor = getComputedStyle(document.body).getPropertyValue("--destaque").trim();
 
@@ -25,7 +21,6 @@ carregarEvolucao();
 carregarAlbuns();
 carregarRanking();
 
-// ---------- KPIs (COUNT, AVG, MAX, MIN e posição vêm do MySQL) ----------
 function carregarKpis() {
     fetch(`/quiz/kpis/${idUsuario}`)
         .then(function (resposta) {
@@ -54,7 +49,6 @@ function carregarKpis() {
         });
 }
 
-// ---------- GRÁFICO 1: evolução dos pontos (linha) ----------
 function carregarEvolucao() {
     fetch(`/quiz/evolucao/${idUsuario}`)
         .then(function (resposta) {
@@ -64,7 +58,6 @@ function carregarEvolucao() {
             let rotulos = [];
             let pontos = [];
 
-            // a lista vem da partida mais nova para a mais antiga, então eu leio de trás para frente
             for (let i = lista.length - 1; i >= 0; i--) {
                 rotulos.push(lista[i].momento_grafico);
                 pontos.push(lista[i].pontos);
@@ -93,7 +86,6 @@ function carregarEvolucao() {
         });
 }
 
-// ---------- GRÁFICO 2: % de acerto por álbum (barras) ----------
 function carregarAlbuns() {
     fetch(`/quiz/albuns/${idUsuario}`)
         .then(function (resposta) {
@@ -105,7 +97,6 @@ function carregarAlbuns() {
             let melhorValor = 0;
             let melhorAlbum = "";
 
-            // garante os 3 álbuns no gráfico, mesmo que ainda não tenha resposta de algum
             for (let i = 0; i < chavesAlbuns.length; i++) {
                 let valor = 0;
 
@@ -124,7 +115,6 @@ function carregarAlbuns() {
                 }
             }
 
-            // KPI "álbum que você mais domina"
             if (melhorAlbum != "") {
                 kpi_album.innerHTML = melhorAlbum;
                 kpi_album_detalhe.innerHTML = melhorValor + "% de acerto";
@@ -151,7 +141,6 @@ function carregarAlbuns() {
         });
 }
 
-// ---------- GRÁFICO 3: ranking dos jogadores (barras na horizontal) ----------
 function carregarRanking() {
     fetch("/quiz/ranking")
         .then(function (resposta) {
@@ -166,7 +155,6 @@ function carregarRanking() {
                 nomes.push((i + 1) + "º " + lista[i].nome);
                 pontos.push(lista[i].total_pontos);
 
-                // a minha barra fica colorida, as dos outros ficam mais claras
                 if (lista[i].nome == sessionStorage.NOME_USUARIO) {
                     cores.push(corDestaque());
                 } else {

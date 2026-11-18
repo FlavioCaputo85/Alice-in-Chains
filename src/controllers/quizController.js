@@ -1,7 +1,5 @@
-// ADICIONADO: controller do quiz (recebe da rota, valida e chama o model)
 let quizModel = require("../models/quizModel");
 
-// quanto vale cada acerto em cada nível (a conta é feita aqui no servidor)
 let pesos = { facil: 10, medio: 20, dificil: 30 };
 let albunsValidos = ["facelift", "dirt", "jarofflies"];
 
@@ -17,7 +15,6 @@ function salvar(req, res) {
     } else if (!Array.isArray(respostas) || respostas.length == 0 || respostas.length > 20) {
         res.status(400).send("As respostas estão inválidas!");
     } else {
-        // confere cada resposta e conta os acertos
         let acertos = 0;
         let limpas = [];
 
@@ -63,7 +60,6 @@ function salvar(req, res) {
     }
 }
 
-// as quatro funções abaixo fazem a mesma coisa: validam o id e devolvem o que o model buscou
 function kpis(req, res) {
     let idUsuario = Number(req.params.idUsuario);
 

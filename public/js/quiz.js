@@ -1,8 +1,3 @@
-// ADICIONADO: quiz.js -> lógica do quiz (níveis, perguntas, pontos e envio para o banco)
-
-// ---------- BANCO DE PERGUNTAS ----------
-// Cada pergunta tem: texto, opcoes, correta (posição da resposta certa na lista, começando do 0)
-// e album (usado no dashboard para calcular o desempenho por álbum).
 let bancoDePerguntas = {
     facil: [
         { texto: "De qual álbum é a música \"Man in the Box\"?", opcoes: ["Facelift", "Dirt", "Jar of Flies"], correta: 0, album: "facelift" },
@@ -40,15 +35,13 @@ let pontosPorNivel = { facil: 10, medio: 20, dificil: 30 };
 let nomesNivel = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
 let nomesAlbuns = { facelift: "Facelift", dirt: "Dirt", jarofflies: "Jar of Flies" };
 
-// ---------- VARIÁVEIS DO JOGO ----------
 let nivel = "";
 let perguntas = [];
 let indice = 0;
 let acertos = 0;
-let respostas = [];      // guarda { album, acertou } de cada pergunta (vai para o banco)
+let respostas = [];
 let respondeu = false;
 
-// ---------- FLUXO ----------
 function escolherNivel(escolhido) {
     nivel = escolhido;
     perguntas = bancoDePerguntas[nivel];
@@ -64,7 +57,6 @@ function escolherNivel(escolhido) {
     mostrarPergunta(-1);
 }
 
-// escolhida = -1 (ainda não respondeu) ou a posição da opção clicada
 function mostrarPergunta(escolhida) {
     let pergunta = perguntas[indice];
     let html = "";
@@ -136,7 +128,6 @@ function proxima() {
     }
 }
 
-// ---------- FIM: calcula os pontos e salva no banco ----------
 function finalizar() {
     let pontos = acertos * pontosPorNivel[nivel];
 
@@ -178,5 +169,4 @@ function finalizar() {
     });
 }
 
-// só entra quem fez login (validarSessao está no sessao.js)
 validarSessao();
