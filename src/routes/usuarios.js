@@ -1,14 +1,18 @@
-var express = require("express");
-var router = express.Router();
+let express = require("express");
+let router = express.Router();
 
-var usuarioController = require("../controllers/usuarioController");
+let usuarioController = require("../controllers/usuarioController");
 
 router.post("/cadastrar", function (req, res) {
     usuarioController.cadastrar(req, res);
-})
+});
 
 router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
+});
+
+router.post("/album-favorito", function (req, res) {
+    usuarioController.albumFavorito(req, res);
 });
 
 module.exports = router;

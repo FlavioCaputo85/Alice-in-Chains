@@ -1,45 +1,99 @@
 # Alice in Chains · Quiz
 
-Projeto individual (SPTech): um quiz sobre as músicas de **Facelift**, **Dirt** e **Jar of Flies**, com login, ranking e dashboard em Chart.js.
-Feito em cima do projeto base **web-data-viz** (Node.js + Express + MySQL), mantendo a arquitetura dele.
+Projeto individual (SPTech): quiz sobre as músicas de **Facelift**, **Dirt** e **Jar of Flies**, com cadastro, login, ranking e dashboard em Chart.js.
+Feito em cima do projeto base **web-data-viz** (Node.js + Express + MySQL), mantendo a estrutura de rotas, controllers e models.
 
-## O que o site tem
+## Telas
 
 | Tela | Arquivo | O que faz |
 |---|---|---|
-| Home | `public/index.html` | Explica o site, mostra os 3 álbuns (clicar muda a estética) e tem a seção "Sobre mim". |
-| Cadastro / Login | `public/cadastro.html`, `public/login.html` | Cria a conta e entra (só o usuário logado joga). |
-| Quiz | `public/dashboard/quiz.html` | 3 níveis (fácil, médio, difícil), 8 perguntas cada. Os pontos por acerto são 10, 20 e 30. |
-| Dashboard | `public/dashboard/dashboard.html` | KPIs e gráficos com dados do MySQL. |
+| Home | `public/index.html` | Explica o site, mostra os 3 álbuns (clicar muda o tema do site) e tem o "Sobre mim". |
+| Cadastro | `public/cadastro.html` | Cria a conta com validação de nome, e-mail e senha segura. |
+| Login | `public/login.html` | Entra no site. |
+| Quiz | `public/dashboard/quiz.html` | 3 níveis (fácil, médio, difícil) com 8 perguntas cada, vindas do banco. |
+| Dashboard | `public/dashboard/dashboard.html` | KPIs e gráficos calculados no MySQL. |
 
-### Tema por álbum
-Ao clicar em um álbum na home, o `<body>` ganha uma classe (`tema-facelift`, `tema-dirt` ou `tema-jarofflies`) e as cores do site mudam com transição suave.
-A escolha fica salva no `localStorage`, então vale para todas as páginas. As animações (entrada dos cards, hover, brilho do álbum escolhido, resposta certa e errada) estão explicadas, uma a uma, em `public/css/albuns.css`.
+## Modelagem lógica
 
-### Dashboard (dados vindos do MySQL)
-- **KPIs:** partidas (`COUNT`), média de pontos (`AVG`), melhor partida (`MAX`), menor pontuação (`MIN`), posição no ranking e álbum que o usuário mais domina.
-- **Gráficos:** evolução dos pontos (linha), % de acerto por álbum (barras) e ranking dos 5 melhores jogadores (barras horizontais).
+O banco `quiz_aic` tem 8 tabelas.
 
-## Arquitetura (frontend → API → banco)
+```mermaid
+erDiagram
+    usuario ||--|| perfil : "tem (1:1)"
+    album ||--o{ perfil : "e favorito de (1:N)"
+    usuario ||--o{ tentativa : "joga (1:N)"
+    nivel ||--o{ tentativa : "define pontos (1:N)"
+    nivel ||--o{ pergunta : "classifica (1:N)"
+    album ||--o{ pergunta : "e sobre (1:N)"
+    pergunta ||--o{ opcao : "tem (1:N)"
+    tentativa ||--o{ resposta : "possui"
+    pergunta ||--o{ resposta : "e respondida em"
+    opcao ||--o{ resposta : "e escolhida em"
 
+    usuario { int id PK
+        varchar nome
+        varchar email UK
+        varchar senha }
+    perfil { int fk_usuario PK,FK
+        int fk_album_favorito FK }
+    album { int id PK
+        varchar nome
+        int ano }
+    nivel { int id PK
+        varchar nome
+        int pontos_por_acerto }
+    pergunta { int id PK
+        varchar texto
+        int fk_nivel FK
+        int fk_album FK }
+    opcao { int id PK
+        int fk_pergunta FK
+        varchar texto
+        tinyint correta }
+    tentativa { int id PK
+        int fk_usuario FK
+        int fk_nivel FK
+        int acertos
+        int total
+        int pontos
+        datetime momento }
+    resposta { int fk_tentativa PK,FK
+        int fk_pergunta PK,FK
+        int fk_opcao FK
+        tinyint acertou }
 ```
-public/ (HTML, CSS, JS)  --fetch-->  src/routes  ->  src/controllers  ->  src/models  -->  MySQL
-```
 
-- **Frontend:** `public/js/quiz.js` e `public/js/dashboard.js` chamam a API com `fetch`.
-- **API (rota nova `/quiz`):** `src/routes/quiz.js`, `src/controllers/quizController.js` e `src/models/quizModel.js`.
-- **Banco:** `src/database/script-tabelas.sql` (tabelas `usuario`, `tentativa` e `resposta`).
+| Tipo | Relacionamento | Como foi feito |
+|---|---|---|
+| **1:1** | `usuario` e `perfil` | `perfil.fk_usuario` é ao mesmo tempo chave primária e estrangeira. |
+| **1:N** | `usuario` e `tentativa` (e também `album`/`pergunta`, `nivel`/`pergunta`, `pergunta`/`opcao`) | A chave estrangeira fica no lado "N". |
+| **N:N** | `tentativa` e `pergunta` | Uma partida responde várias perguntas, e uma pergunta aparece em várias partidas. A tabela associativa é `resposta`, com chave primária composta (`fk_tentativa`, `fk_pergunta`). |
 
 ## Como rodar
 
-1. Rode o script `src/database/script-tabelas.sql` no MySQL.
-2. Preencha o `.env.dev` com os dados do seu banco (`DB_DATABASE='quiz_aic'`, usuário e senha).
-3. Instale e inicie:
+1. No MySQL (na VM), execute `src/database/script-tabelas.sql`. Ele recria o banco `quiz_aic` do zero, com as perguntas.
+2. Copie `.env.dev.example` para `.env.dev` e preencha com os dados do seu banco.
+3. Rode:
    ```bash
    npm install
    npm start
    ```
 4. Abra `http://localhost:3333`.
 
-## Tecnologias
-HTML, CSS, JavaScript, Node.js, Express, MySQL e Chart.js.
+## Estrutura
+
+```
+app.js                      servidor Express
+src/
+  database/                 config.js (conexão) e script-tabelas.sql
+  routes/                   usuarios.js e quiz.js
+  controllers/              validam o que chega e respondem
+  models/                   guardam os comandos SQL
+public/
+  index.html, login.html, cadastro.html
+  dashboard/                quiz.html e dashboard.html
+  css/estilo.css            um único CSS, com os temas por álbum
+  js/                       um arquivo JS por tela, mais validacao.js, sessao.js e tema.js
+```
+
+Mais detalhes sobre o código estão em `ALTERACOES.md`, e o registro de uso de IA está em `DIARIO_DE_PROMPTS.md`.

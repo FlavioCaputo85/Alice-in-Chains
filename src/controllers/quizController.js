@@ -1,60 +1,64 @@
 let quizModel = require("../models/quizModel");
 
-let pesos = { facil: 10, medio: 20, dificil: 30 };
-let albunsValidos = ["facelift", "dirt", "jarofflies"];
+function responderLista(promessa, res) {
+    promessa
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+function perguntas(req, res) {
+    let idNivel = Number(req.params.idNivel);
+
+    if (isNaN(idNivel)) {
+        res.status(400).send("O nível está inválido!");
+    } else {
+        responderLista(quizModel.buscarPerguntas(idNivel), res);
+    }
+}
 
 function salvar(req, res) {
     let idUsuario = Number(req.body.idUsuarioServer);
-    let nivel = req.body.nivelServer;
-    let respostas = req.body.respostasServer;
+    let idNivel = Number(req.body.idNivelServer);
+    let opcoes = req.body.opcoesServer;
+    let lista = "";
+    let opcoesValidas = true;
 
-    if (isNaN(idUsuario)) {
-        res.status(400).send("O id do usuário está inválido!");
-    } else if (pesos[nivel] == undefined) {
-        res.status(400).send("O nível está inválido!");
-    } else if (!Array.isArray(respostas) || respostas.length == 0 || respostas.length > 20) {
-        res.status(400).send("As respostas estão inválidas!");
+    if (Array.isArray(opcoes) == false || opcoes.length == 0 || opcoes.length > 20) {
+        opcoesValidas = false;
     } else {
-        let acertos = 0;
-        let limpas = [];
+        for (let i = 0; i < opcoes.length; i++) {
+            let numero = Number(opcoes[i]);
 
-        for (let i = 0; i < respostas.length; i++) {
-            if (albunsValidos.indexOf(respostas[i].album) != -1) {
-                let acertou = 0;
-                if (respostas[i].acertou == 1) {
-                    acertou = 1;
-                    acertos++;
-                }
-                limpas.push({ album: respostas[i].album, acertou: acertou });
+            if (isNaN(numero)) {
+                opcoesValidas = false;
+            } else if (i == 0) {
+                lista = String(numero);
+            } else {
+                lista += "," + numero;
             }
         }
+    }
 
-        if (limpas.length != respostas.length) {
-            res.status(400).send("Existe uma resposta com álbum inválido!");
-            return;
-        }
-
-        let pontos = acertos * pesos[nivel];
-
-        quizModel.salvarTentativa(idUsuario, nivel, acertos, limpas.length, pontos)
+    if (isNaN(idUsuario) || isNaN(idNivel)) {
+        res.status(400).send("Usuário ou nível inválido!");
+    } else if (opcoesValidas == false) {
+        res.status(400).send("As respostas estão inválidas!");
+    } else {
+        quizModel.salvarPartida(idUsuario, idNivel, lista)
             .then(function (resultado) {
-                let idTentativa = resultado.insertId;
-                let valores = "";
-
-                for (let i = 0; i < limpas.length; i++) {
-                    if (i > 0) {
-                        valores += ", ";
-                    }
-                    valores += `(${idTentativa}, '${limpas[i].album}', ${limpas[i].acertou})`;
+                if (resultado.affectedRows == 1) {
+                    res.status(400).send("Nenhuma resposta válida para este nível!");
+                } else {
+                    res.status(201).send("Partida salva!");
                 }
-
-                return quizModel.salvarRespostas(valores).then(function () {
-                    res.status(201).json({ acertos: acertos, pontos: pontos });
-                });
             })
             .catch(function (erro) {
                 console.log(erro);
-                console.log("\nHouve um erro ao salvar a partida! Erro: ", erro.sqlMessage);
                 res.status(500).json(erro.sqlMessage);
             });
     }
@@ -66,13 +70,7 @@ function kpis(req, res) {
     if (isNaN(idUsuario)) {
         res.status(400).send("O id do usuário está inválido!");
     } else {
-        quizModel.buscarKpis(idUsuario)
-            .then(function (resultado) {
-                res.status(200).json(resultado);
-            }).catch(function (erro) {
-                console.log(erro);
-                res.status(500).json(erro.sqlMessage);
-            });
+        responderLista(quizModel.buscarKpis(idUsuario), res);
     }
 }
 
@@ -82,13 +80,7 @@ function evolucao(req, res) {
     if (isNaN(idUsuario)) {
         res.status(400).send("O id do usuário está inválido!");
     } else {
-        quizModel.buscarEvolucao(idUsuario)
-            .then(function (resultado) {
-                res.status(200).json(resultado);
-            }).catch(function (erro) {
-                console.log(erro);
-                res.status(500).json(erro.sqlMessage);
-            });
+        responderLista(quizModel.buscarEvolucao(idUsuario), res);
     }
 }
 
@@ -98,24 +90,24 @@ function albuns(req, res) {
     if (isNaN(idUsuario)) {
         res.status(400).send("O id do usuário está inválido!");
     } else {
-        quizModel.buscarAlbuns(idUsuario)
-            .then(function (resultado) {
-                res.status(200).json(resultado);
-            }).catch(function (erro) {
-                console.log(erro);
-                res.status(500).json(erro.sqlMessage);
-            });
+        responderLista(quizModel.buscarAlbuns(idUsuario), res);
     }
 }
 
 function ranking(req, res) {
-    quizModel.buscarRanking()
-        .then(function (resultado) {
-            res.status(200).json(resultado);
-        }).catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage);
-        });
+    responderLista(quizModel.buscarRanking(), res);
 }
 
-module.exports = { salvar, kpis, evolucao, albuns, ranking };
+function dificeis(req, res) {
+    responderLista(quizModel.buscarDificeis(), res);
+}
+
+module.exports = {
+    perguntas,
+    salvar,
+    kpis,
+    evolucao,
+    albuns,
+    ranking,
+    dificeis
+};

@@ -3,79 +3,48 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alice in Chains | Quiz</title>
-
-    <script src="./js/sessao.js"></script>
-
-    <link rel="stylesheet" href="./css/estilo.css">
-    <link rel="stylesheet" href="./css/albuns.css">
-    <link rel="icon" href="./assets/icon/logo2.png">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="icon" href="assets/icon/logo.png">
+    <link rel="stylesheet" href="css/estilo.css">
 </head>
 
 <body>
-    <script src="./js/tema.js"></script>
+    <script src="js/tema.js"></script>
 
     <div class="header">
         <div class="container">
             <h1 class="titulo">Alice in Chains</h1>
             <ul class="navbar">
-                <li class="agora">
-                    <a href="#">Início</a>
-                </li>
-                <li>
-                    <a href="dashboard/quiz.html">Quiz</a>
-                </li>
-                <li>
-                    <a href="dashboard/dashboard.html">Dashboard</a>
-                </li>
-                <li>|</li>
-                <li id="li_login">
-                    <a href="login.html">Login</a>
-                </li>
-                <li id="li_cadastro">
-                    <a href="cadastro.html">Cadastro</a>
-                </li>
-                <!--"Sair" só aparece quando tem usuário logado -->
-                <li id="li_sair" class="escondido">
-                    <a href="#" onclick="sairDaConta()">Sair</a>
-                </li>
+                <li class="agora"><a href="index.html">Início</a></li>
+                <li><a href="dashboard/quiz.html">Quiz</a></li>
+                <li><a href="dashboard/dashboard.html">Dashboard</a></li>
+                <li id="li_login"><a href="login.html">Login</a></li>
+                <li id="li_cadastro"><a href="cadastro.html">Cadastro</a></li>
+                <li id="li_sair" class="escondido"><a href="#" onclick="sairDaConta()">Sair</a></li>
             </ul>
         </div>
     </div>
 
     <div class="banner">
         <div class="container">
-            <p class="sobretitulo">QUIZ · ROCK · DASHBOARD</p>
             <h2>Facelift · Dirt · Jar of Flies</h2>
-            <p>Teste o quanto você conhece as músicas de três álbuns do Alice in Chains. Escolha um álbum abaixo, jogue o quiz nos níveis fácil, médio ou difícil e depois veja o seu
-                desempenho no dashboard.</p>
+            <p>Teste o quanto você conhece as músicas de três trabalhos do Alice in Chains. Escolha um álbum abaixo
+                (o site muda de cara!), jogue o quiz nos níveis fácil, médio ou difícil e veja o seu desempenho no
+                dashboard.</p>
 
-            <div class="albuns">
-                <!-- estudar essa parte -->
+            <div class="albuns">    
                 <div id="card_facelift" class="album" onclick="escolherAlbum('facelift')">
-                    <div class="capa capa-facelift">
-                        <img src="assets/imgs/albuns/facelift.jpg" alt="Capa do álbum Facelift">
-                        <span>Facelift</span>
-                    </div>
-                    <div class="album-nome">1990</div>
+                    <img src="assets/imgs/albuns/facelift.jpg" alt="Capa do álbum Facelift">
+                    <span>Facelift · 1990</span>
                 </div>
-
                 <div id="card_dirt" class="album" onclick="escolherAlbum('dirt')">
-                    <div class="capa capa-dirt">
-                        <img src="assets/imgs/albuns/dirt.jpg" alt="Capa do álbum Dirt">
-                        <span>Dirt</span>
-                    </div>
-                    <div class="album-nome">1992</div>
+                    <img src="assets/imgs/albuns/dirt.jpg" alt="Capa do álbum Dirt">
+                    <span>Dirt · 1992</span>
                 </div>
                 <div id="card_jarofflies" class="album" onclick="escolherAlbum('jarofflies')">
-                    <div class="capa capa-jarofflies">
-                        <img src="assets/imgs/albuns/jarofflies.jpg" alt="Capa do EP Jar of Flies">
-                        <span>Jar of Flies</span>
-                    </div>
-                    <div class="album-nome">1994</div>
+                    <img src="assets/imgs/albuns/jarofflies.jpg" alt="Capa do EP Jar of Flies">
+                    <span>Jar of Flies · 1994</span>
                 </div>
             </div>
 
@@ -83,21 +52,21 @@
         </div>
     </div>
 
-    <div class="social">
-        <h3 class="secao">Como funciona</h3>
+    <div class="passos">
         <div class="container">
-            <div class="boxes">
-                <div class="box">
+            <h3>Como funciona</h3>
+            <div class="linha">
+                <div class="passo">
                     <div class="numero">1</div>
                     <h4>Escolha o álbum</h4>
                     <p>Clique em Facelift, Dirt ou Jar of Flies e veja as cores do site mudarem.</p>
                 </div>
-                <div class="box">
+                <div class="passo">
                     <div class="numero">2</div>
                     <h4>Jogue o quiz</h4>
                     <p>São três níveis. Quanto mais difícil, mais pontos cada acerto vale.</p>
                 </div>
-                <div class="box">
+                <div class="passo">
                     <div class="numero">3</div>
                     <h4>Veja o dashboard</h4>
                     <p>Média, melhor partida, desempenho por álbum e o ranking dos jogadores.</p>
@@ -106,22 +75,21 @@
         </div>
     </div>
 
-    <!--seção "Sobre mim" -->
-    <div class="sobre-mim">
+    <div class="sobre">
         <div class="container">
             <div class="perfil">
                 <img src="assets/imgs/perfil.png" alt="Foto do Flávio">
-                <h3>Flávio</h3>
-                <small>Dev em formação · São Paulo</small>
+                <h3 class="nome">Flávio</h3>
+                <p class="pequeno">DEV EM FORMAÇÃO · SÃO PAULO</p>
             </div>
 
             <div class="jornada">
-                <h3 class="secao">Sobre mim</h3>
+                <h3>Sobre mim</h3>
 
                 <div class="etapa">
                     <span class="num">01</span>
                     <div>
-                        <span class="ano">2020</span>
+                        <p class="pequeno">2020</p>
                         <h4>Primeiro acorde</h4>
                         <p>Mexi com software no Windows pela primeira vez e me apaixonei por programação.</p>
                     </div>
@@ -129,7 +97,7 @@
                 <div class="etapa">
                     <span class="num">02</span>
                     <div>
-                        <span class="ano">2023</span>
+                        <p class="pequeno">2023</p>
                         <h4>Entrada na Etec</h4>
                         <p>Comecei Informática para Internet (ETIM) na Etec.</p>
                     </div>
@@ -137,7 +105,7 @@
                 <div class="etapa">
                     <span class="num">03</span>
                     <div>
-                        <span class="ano">2024</span>
+                        <p class="pequeno">2024</p>
                         <h4>Mudança pra São Paulo</h4>
                         <p>Me mudei para São Paulo e entrei na Etec de Cidade Tiradentes, no mesmo curso, agora na modalidade MTec.</p>
                     </div>
@@ -145,7 +113,7 @@
                 <div class="etapa">
                     <span class="num">04</span>
                     <div>
-                        <span class="ano">JULHO 2026</span>
+                        <p class="pequeno">JULHO 2026</p>
                         <h4>SPTech</h4>
                         <p>Entrei na SPTech. Este quiz é o meu projeto individual.</p>
                     </div>
@@ -153,16 +121,16 @@
 
                 <div class="favoritas">
                     <h4>Minhas favoritas</h4>
-                    <div class="faixas" style="justify-content: flex-start;">
-                        <span class="faixa-chip fav">Man in the Box</span>
-                        <span class="faixa-chip fav">Bleed the Freak</span>
-                        <span class="faixa-chip fav">Them Bones</span>
-                        <span class="faixa-chip fav">Junkhead</span>
-                        <span class="faixa-chip fav">Rain When I Die</span>
-                        <span class="faixa-chip fav">Dam That River</span>
-                        <span class="faixa-chip fav">Down in a Hole</span>
-                        <span class="faixa-chip fav">Nutshell</span>
-                        <span class="faixa-chip fav">Rotten Apple</span>
+                    <div class="chips">
+                        <span class="chip favorita">Man in the Box</span>
+                        <span class="chip favorita">Bleed the Freak</span>
+                        <span class="chip favorita">Them Bones</span>
+                        <span class="chip favorita">Junkhead</span>
+                        <span class="chip favorita">Rain When I Die</span>
+                        <span class="chip favorita">Dam That River</span>
+                        <span class="chip favorita">Down in a Hole</span>
+                        <span class="chip favorita">Nutshell</span>
+                        <span class="chip favorita">Rotten Apple</span>
                     </div>
                 </div>
             </div>
@@ -170,12 +138,10 @@
     </div>
 
     <div class="footer">
-        <div class="container">
-            <h4>Feito por Flávio - SPTech 2026</h4>
-        </div>
+        <h4>Feito com amor por Flávio &hearts; SPTech &copy; 2026</h4>
     </div>
 
-    <script src="./js/home.js"></script>
+    <script src="js/home.js"></script>
 </body>
 
 </html>

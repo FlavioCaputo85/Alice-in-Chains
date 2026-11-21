@@ -3,15 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../assets/icon/favicon2.ico">
-    <script src="../js/sessao.js"></script>
-    <link rel="stylesheet" href="../css/estilo.css">
-    <link rel="stylesheet" href="../css/albuns.css">
     <title>Alice in Chains | Dashboard</title>
-
+    <link rel="icon" href="../assets/icon/logo.png">
+    <link rel="stylesheet" href="../css/estilo.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/sessao.js"></script>
 </head>
 
 <body>
@@ -23,9 +20,8 @@
             <ul class="navbar">
                 <li><a href="../index.html">Início</a></li>
                 <li><a href="quiz.html">Quiz</a></li>
-                <li class="agora"><a href="#">Dashboard</a></li>
-                <li>|</li>
-                <li class="hello-nav">Olá, <b id="b_usuario">usuário</b></li>
+                <li class="agora"><a href="dashboard.html">Dashboard</a></li>
+                <li>Olá, <b id="b_usuario"></b></li>
                 <li><a href="#" onclick="limparSessao()">Sair</a></li>
             </ul>
         </div>
@@ -33,7 +29,7 @@
 
     <div class="pagina">
         <h2>Seu desempenho</h2>
-        <p id="div_aviso" class="sub"></p>
+        <p id="div_aviso"></p>
 
         <div class="kpis">
             <div class="kpi"><strong id="kpi_partidas">-</strong><span>Partidas jogadas</span></div>
@@ -53,9 +49,14 @@
             <div class="grafico"><canvas id="grafico_ranking"></canvas></div>
         </div>
 
+        <div class="painel">
+            <h2>Perguntas que mais derrubam os jogadores</h2>
+            <div id="div_dificeis"></div>
+        </div>
+
         <div class="acoes">
-            <a class="btn-link" href="quiz.html">Jogar de novo</a>
-            <a class="btn-link vazio" href="../index.html">Voltar ao início</a>
+            <a class="botao" href="quiz.html">Jogar de novo</a>
+            <a class="botao vazio" href="../index.html">Voltar ao início</a>
         </div>
     </div>
 

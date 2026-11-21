@@ -3,6 +3,10 @@ let router = express.Router();
 
 let quizController = require("../controllers/quizController");
 
+router.get("/perguntas/:idNivel", function (req, res) {
+    quizController.perguntas(req, res);
+});
+
 router.post("/salvar", function (req, res) {
     quizController.salvar(req, res);
 });
@@ -21,6 +25,10 @@ router.get("/albuns/:idUsuario", function (req, res) {
 
 router.get("/ranking", function (req, res) {
     quizController.ranking(req, res);
+});
+
+router.get("/dificeis", function (req, res) {
+    quizController.dificeis(req, res);
 });
 
 module.exports = router;

@@ -1,31 +1,118 @@
-# O que foi TIRADO ou TROCADO do código original (web-data-viz)
+# Guia do código e alterações
 
-Cada item abaixo tem, no código, um comentário `ALTERADO:` no lugar da mudança.
+Este arquivo serve para eu entender e explicar o projeto. Está organizado do geral para o detalhe.
 
-## Backend
+## 1. O caminho de uma requisição
+
+Tudo funciona no mesmo caminho:
+
+**Tela (HTML + JS) → `fetch` → rota → controller → model → MySQL → JSON → tela**
+
+| Camada | Pasta | Responsabilidade |
+|---|---|---|
+| Frontend | `public/` | Mostrar as telas, validar o formulário e chamar a API com `fetch`. |
+| Rota | `src/routes/` | Ligar um endereço (ex.: `POST /quiz/salvar`) a uma função do controller. |
+| Controller | `src/controllers/` | Conferir os dados que chegaram e decidir a resposta (200, 400, 500...). |
+| Model | `src/models/` | Escrever o comando SQL e mandar o `config.js` executar. |
+| Banco | `src/database/` | `config.js` abre a conexão, e o `script-tabelas.sql` cria o banco. |
+
+## 2. O que foi removido do web-data-viz
+
+Eram partes do projeto original (AquaTech) que não fazem sentido para o quiz.
+
+| Removido | Por quê |
+|---|---|
+| Empresa e aquário (controllers, models e rotas) | O quiz não tem empresas nem aquários. |
+| Avisos e medidas (controllers, models e rotas) | Eram do mural de avisos e do sensor do AquaTech. O `medidaController` ainda chamava o `medidaModel`, que já tinha sido apagado, então o servidor nem subia. |
+| `routes/index.js` | Usava `res.render`, mas o projeto não tem motor de views. O `index.html` já é servido pela pasta `public`. |
+| `simulador.html`, `cards.html`, `mural.html`, `edicao-aviso.html` | Telas do AquaTech. |
+| `alerta.js` e `dashboards.css` | Só serviam às telas do AquaTech. |
+| GIFs de "aguarde" e as imagens do AquaTech | Não são mais usados. |
+| `albuns.css` | Foi juntado ao `estilo.css`: agora existe um CSS só. |
+| Todos os comentários | O professor não aceita comentários no código. |
+
+## 3. O que foi mantido do original
+
+| Mantido | Observação |
+|---|---|
+| `src/database/config.js` | É a conexão do projeto base. Só tirei os comentários. |
+| Padrão rota → controller → model | Todas as rotas novas seguem o `PASSO_A_PASSO_CRIAR_ROTA_NA_API`. |
+| `.env.dev` | Guarda a conexão com o banco. Não vai para o Git. O modelo é o `.env.dev.example`. |
+| `package.json` e `LICENSE` | Sem mudanças. |
+
+## 4. O que foi alterado nos arquivos originais
+
 | Arquivo | O que mudou |
 |---|---|
-| `app.js` | **Só acrescentei** 2 linhas (importar e usar a rota `/quiz`). Nada foi tirado. |
-| `src/controllers/usuarioController.js` | **Tirei** a busca de aquários no login (`aquarioModel.buscarAquariosPorEmpresa`) e a variável `fkEmpresa` do cadastro (com a validação dela). |
-| `src/models/usuarioModel.js` | **Tirei** `fk_empresa` do SELECT do login e do INSERT do cadastro. |
-| `src/database/script-tabelas.sql` | **Troquei** as tabelas do AquaTech (empresa, aviso, aquario, medida) pelas do quiz (usuario, tentativa, resposta). |
+| `app.js` | Só carrega as rotas `usuarios` e `quiz`. Usa `let` e `if` no lugar de `var` e `===`. |
+| `usuarioController.js` | Valida e-mail e senha antes do banco, responde 409 para e-mail repetido e tem a função `albumFavorito`. |
+| `usuarioModel.js` | O cadastro agora também cria o `perfil` do usuário, o login traz o álbum favorito e existe `atualizarAlbumFavorito`. |
+| `sessao.js` | Sem `getElementById`: usa o `id` do elemento direto (ex.: `b_usuario.innerHTML`). |
+| `estilo.css` | Reescrito, mais simples, com 4 temas (padrão, Facelift, Dirt e Jar of Flies). |
+| `login.html` e `cadastro.html` | Mais simples. O JavaScript foi para `login.js` e `cadastro.js`. |
 
-Não mexi nos outros arquivos de `src/` (avisos, aquários, empresas, medidas). Eles continuam no projeto, mas o site não usa.
+## 5. Arquivos novos e para que servem
 
-## Frontend
-| Arquivo | O que mudou |
+| Arquivo | Para que serve |
 |---|---|
-| `public/css/estilo.css` | **Troquei** as cores fixas por variáveis (`var(--...)`), **tirei** as imagens de fundo das águas-vivas e mudei o `width` do `.navbar` de 300px para auto. |
-| `public/index.html` | **Troquei** o conteúdo: o banner do AquaTech virou a escolha de álbuns, "Missão/Visão/Valores" virou "Como funciona", e adicionei "Sobre mim". |
-| `public/login.html` | **Troquei** textos do cabeçalho/rodapé e o link "Simulador" por "Quiz". **Tirei** a linha `sessionStorage.AQUARIOS`. Depois do login, vai para `index.html` (antes: `dashboard/cards.html`). |
-| `public/cadastro.html` | **Tirei** o campo "Código de ativação", a validação de empresas (array e `for`), a função `listar()` e o `onload="listar()"`. |
-| `public/dashboard/dashboard.html` | **Troquei** a página inteira (era o dashboard de temperatura do AquaTech). |
+| `script-tabelas.sql` | Cria as 8 tabelas e insere álbuns, níveis, 24 perguntas e 88 opções. |
+| `routes/quiz.js`, `controllers/quizController.js`, `models/quizModel.js` | A API do quiz e do dashboard. |
+| `js/validacao.js` | Valida nome, e-mail e senha com `if`, `for` e `while`. Também é usado pelo servidor. |
+| `js/tema.js` | Aplica o tema do álbum ao abrir a página. |
+| `js/home.js` | Troca o tema ao clicar no álbum e salva o álbum favorito. |
+| `js/quiz.js` | Busca as perguntas no banco e controla o jogo. |
+| `js/dashboard.js` | Busca os indicadores e monta os gráficos. |
 
-## Arquivos removidos (eram só do AquaTech)
-`public/simulador.html`, `public/dashboard/cards.html`, `public/dashboard/mural.html`, `public/dashboard/edicao-aviso.html`, `public/js/alerta.js` e `public/css/dashboards.css`.
+## 6. Modelagem lógica explicada
 
-## Arquivos novos
-`public/css/albuns.css`, `public/js/tema.js`, `public/js/home.js`, `public/js/quiz.js`, `public/js/dashboard.js`, `public/dashboard/quiz.html`, `src/routes/quiz.js`, `src/controllers/quizController.js` e `src/models/quizModel.js`.
+Os três relacionamentos pedidos:
 
-## Mantido sem alteração
-`public/js/sessao.js`, `src/database/config.js`, `.env.dev`, `package.json`, `DOCUMENTOS_DE_APOIO/` e o restante do backend legado.
+- **1:1, `usuario` e `perfil`.** Cada usuário tem exatamente um perfil. A chave primária do `perfil` é a própria chave estrangeira `fk_usuario`, então não dá para ter dois perfis do mesmo usuário. O perfil guarda o álbum favorito.
+- **1:N, `usuario` e `tentativa`.** Um usuário joga várias partidas, e cada partida é de um usuário só. A chave estrangeira `fk_usuario` fica na tabela do lado "N".
+- **N:N, `tentativa` e `pergunta`.** Uma partida tem várias perguntas e uma pergunta aparece em várias partidas. Um banco relacional não guarda N:N direto, então se cria a tabela associativa `resposta`, com chave primária composta (`fk_tentativa`, `fk_pergunta`). Ela também guarda a opção escolhida e se acertou.
+
+Outros 1:N: `album` tem várias `pergunta`, `nivel` tem várias `pergunta` e várias `tentativa`, e `pergunta` tem várias `opcao`.
+
+Por que `nivel` e `album` são tabelas e não texto: para os pontos por acerto e os nomes ficarem em um só lugar, e para o servidor calcular os pontos pelo banco.
+
+## 7. Fluxos passo a passo
+
+**Cadastro.** `cadastro.js` valida o formulário e chama `POST /usuarios/cadastrar` → o controller valida de novo → o model insere em `usuario` e depois em `perfil`. Se o e-mail já existe, o MySQL recusa (coluna `UNIQUE`) e o controller responde 409.
+
+**Login.** `login.js` chama `POST /usuarios/autenticar` → o model faz `SELECT` com `LEFT JOIN` em `perfil` e `album` → o JS guarda id, nome e álbum favorito no `sessionStorage` e aplica o tema salvo.
+
+**Jogar.** `quiz.js` chama `GET /quiz/perguntas/:idNivel`. O banco devolve uma linha por opção (`JOIN` de `pergunta`, `opcao`, `album` e `nivel`), e um `for` agrupa as linhas em um vetor de perguntas.
+
+**Salvar a partida.** `POST /quiz/salvar` recebe só o id do usuário, o id do nível e o vetor com os ids das opções escolhidas. O model faz quatro passos: cria a `tentativa`, insere as `resposta` (copiando o campo `correta` de cada opção), calcula acertos e pontos com `SUM` e `COUNT`, e apaga a tentativa se nenhuma resposta for válida. Os pontos nunca vêm do navegador.
+
+**Dashboard.** `dashboard.js` chama 5 rotas. Cada uma roda um `SELECT` e devolve JSON, que vira card ou gráfico.
+
+| Indicador | SQL |
+|---|---|
+| Partidas, média, melhor, menor | `COUNT`, `AVG`, `MAX`, `MIN` em `tentativa` |
+| Posição no ranking | Conta quantos usuários têm `SUM(pontos)` maior, mais 1 |
+| Desempenho por álbum | `AVG(acertou) * 100` com `GROUP BY album` (passa pela tabela N:N `resposta`) |
+| Perguntas mais difíceis | `AVG(acertou)` por pergunta, `ORDER BY` do menor e `LIMIT 3` |
+
+## 8. Regras da disciplina
+
+| Regra | Como ficou |
+|---|---|
+| Sem comentários | Nenhum arquivo tem comentário. |
+| `let` no lugar de `var` | Todos os arquivos usam `let`. |
+| `==` e `!=` | Sem `===` ou `!==`. |
+| Sem `getElementById` | Os elementos são usados pelo `id` direto. |
+| Lógica básica | Só `if`, `else if`, `else`, `for` e `while`. |
+| Sem `return` | Só nas funções que precisam devolver um valor (`validacao.js`) e nos models, que devolvem a promessa do banco, como no projeto base. |
+
+## 9. Perguntas que o professor pode fazer
+
+| Pergunta | Resposta curta |
+|---|---|
+| Por que valida no navegador e no servidor? | O navegador pode ser burlado. A validação do servidor é a que protege o banco. |
+| Por que `resposta` tem chave composta? | Para a mesma partida não responder duas vezes a mesma pergunta. |
+| Por que proibiu aspas na senha e no nome? | O SQL do projeto base é montado juntando texto, e aspas poderiam virar comandos (injeção de SQL). |
+| Como o ranking é calculado? | `SUM` dos pontos de cada usuário em `tentativa`, ordenado do maior para o menor. |
+| O que é a tabela `perfil`? | O 1:1. Guarda o álbum favorito, que faz o site abrir já no tema do usuário. |
+| Onde roda o banco? | Em uma VM Linux. A API acessa pela porta 3307 do computador, redirecionada para a 3306 da VM. |
+| O que ainda é fraco? | A senha fica em texto no banco, e o servidor confia no id enviado pelo navegador. Para um projeto real, usaria hash e sessão no servidor. |
