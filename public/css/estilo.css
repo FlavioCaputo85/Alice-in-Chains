@@ -5,6 +5,7 @@
     --texto: #f2f2f2;
     --card: #ece7e1;
     --painel: rgba(0, 0, 0, 0.35);
+    --bloco: #7a7a7a;
 }
 
 body.tema-facelift {
@@ -13,6 +14,7 @@ body.tema-facelift {
     --botao: #b8901c;
     --texto: #fff6dc;
     --card: #f5edd6;
+    --bloco: #d0a22a;
 }
 
 body.tema-dirt {
@@ -21,6 +23,7 @@ body.tema-dirt {
     --botao: #8b0000;
     --texto: #ffffff;
     --card: #f6e9e4;
+    --bloco: #d4602f;
 }
 
 body.tema-jarofflies {
@@ -29,6 +32,7 @@ body.tema-jarofflies {
     --botao: #2f6f7a;
     --texto: #eef9f8;
     --card: #e6f1f0;
+    --bloco: #7fb5bd;
 }
 
 * {
@@ -594,6 +598,169 @@ body {
     border-bottom: 1px solid var(--destaque);
 }
 
+.historia .container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px 0 20px;
+}
+
+.historia h2 {
+    color: var(--destaque);
+    font-size: 32px;
+    text-transform: uppercase;
+}
+
+.capitulo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.capitulo h3 {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.capitulo h4 {
+    color: var(--destaque);
+    text-transform: uppercase;
+}
+
+.capitulo p {
+    line-height: 1.6;
+}
+
+.obs {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.duo {
+    display: flex;
+    gap: 18px;
+    padding: 18px;
+    background-color: var(--painel);
+    border: 2px solid var(--destaque);
+    border-radius: 14px;
+}
+
+.bloco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    border-radius: 14px;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), var(--bloco));
+    transition: transform 0.3s;
+}
+
+.bloco-guitarra {
+    width: 28%;
+}
+
+.bloco-guitarra img {
+    width: 85%;
+    height: 220px;
+    object-fit: contain;
+}
+
+.bloco-video {
+    flex: 1;
+    flex-direction: column;
+    gap: 14px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.bloco-video:hover {
+    transform: scale(1.02);
+}
+
+.bloco-capas {
+    width: 46%;
+    gap: 10px;
+    padding: 12px;
+}
+
+.bloco-capas img {
+    flex: 1;
+    min-width: 0;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.bloco-texto {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.bloco-texto p {
+    font-size: 18px;
+}
+
+.gatilhos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.gatilho {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background-color: var(--painel);
+    border: 2px solid var(--destaque);
+}
+
+.gatilho img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+}
+
+.gatilho h5 {
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.bandas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.banda {
+    width: calc((100% - 40px) / 3);
+    background-color: var(--painel);
+    border: 2px solid var(--destaque);
+    transition: transform 0.3s;
+}
+
+.banda:hover {
+    transform: translateY(-6px);
+}
+
+.banda img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.banda div {
+    padding: 14px;
+}
+
+.banda h4 {
+    margin-bottom: 6px;
+}
+
 @media (max-width: 800px) {
     .header .container {
         flex-direction: column;
@@ -603,6 +770,19 @@ body {
     }
 
     .album-info {
+        width: 100%;
+    }
+
+    .duo {
+        flex-direction: column;
+    }
+
+    .bloco-guitarra,
+    .bloco-capas {
+        width: 100%;
+    }
+
+    .banda {
         width: 100%;
     }
 }

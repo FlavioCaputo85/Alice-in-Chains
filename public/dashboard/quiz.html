@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +8,8 @@
     <link rel="stylesheet" href="../css/estilo.css">
     <script src="../js/sessao.js"></script>
 </head>
-
 <body>
     <script src="../js/tema.js"></script>
-
     <div class="header">
         <div class="container">
             <h1 class="titulo">Alice in Chains</h1>
@@ -25,15 +22,14 @@
             </ul>
         </div>
     </div>
-
     <div class="pagina">
         <div id="div_niveis">
             <h2>Escolha o nível</h2>
             <p>Cada nível tem 8 perguntas sobre as músicas de Facelift, Dirt e Jar of Flies. Quanto mais difícil, mais pontos por acerto.</p>
-            <div class="niveis">
-                <button class="nivel" onclick="escolherNivel(1)">Fácil</button>
-                <button class="nivel" onclick="escolherNivel(2)">Médio</button>
-                <button class="nivel" onclick="escolherNivel(3)">Difícil</button>
+                <div class="niveis">
+                <button class="nivel" onclick="escolherNivel('facil')">Fácil</button>
+                <button class="nivel" onclick="escolherNivel('medio')">Médio</button>
+                <button class="nivel" onclick="escolherNivel('dificil')">Difícil</button>
             </div>
             <p id="div_niveis_aviso"></p>
         </div>
@@ -46,8 +42,6 @@
 
         <div id="div_fim" class="painel escondido"></div>
     </div>
-
     <script src="../js/quiz.js"></script>
 </body>
-
 </html>
