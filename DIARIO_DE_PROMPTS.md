@@ -53,6 +53,12 @@ Aqui eu registro o que pedi para a IA, o que ela respondeu, o que eu usei e o qu
 - **A IA fez:** propôs 8 tabelas, escreveu o script SQL, testou em um MariaDB e simplificou os arquivos JS.
 - **O que eu fiz:** [preencher: o que você entendeu e o que mudou ou escolheu sozinho].
 
+### 9. A cereja do bolo
+- **Pedi:** ideias de algo além do quiz, que combine com o tema, que o usuário possa ouvir ou mexer, e que seja simples o bastante para o que eu aprendi (API, `for`, `while`, `if`, vetores, JSON e relacionamentos).
+- **A IA fez:** sugeriu um toca-discos que tocava trechos por uma API pública de música. Depois, quando eu disse que não podia usar API de terceiros, trocou a ideia por um setlist de show dos sonhos e, quando achei complexo, por opções menores: toca-discos sem API, carteirinha de fã e música da vez.
+- **O que eu decidi:** descartei a API de terceiros e o setlist. Escolhi o toca-discos e a carteirinha e pedi para não mudar a modelagem. Defini como o disco deveria ser: parado e escuro no começo, os 3 álbuns ao lado, e a capa no centro do disco ao clicar, girando e tocando.
+- **O que eu aprendi:** que dá para fazer algo bonito com CSS (animação e filtro) e poucas linhas de JavaScript, sem recurso novo.
+
 ## Parte 2. Perguntas boas para fazer à IA
 
 Para cada pergunta, a IA ajuda a estudar e conferir, e eu continuo fazendo o trabalho.

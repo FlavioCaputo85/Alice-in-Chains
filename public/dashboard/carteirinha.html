@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice in Chains | Carteirinha</title>
+    <link rel="icon" href="../assets/icon/logo.png">
+    <link rel="stylesheet" href="../css/estilo.css">
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body>
+    <script src="../js/tema.js"></script>
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo">Alice in Chains</h1>
+            <ul class="navbar">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="../toca-discos.html">Toca-discos</a></li>
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li class="agora"><a href="carteirinha.html">Carteirinha</a></li>
+                <li>Olá, <b id="b_usuario"></b></li>
+                <li><a href="#" onclick="limparSessao()">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina">
+        <h2>Minha carteirinha de fã</h2>
+        <p>Escolha o seu álbum favorito e a carteirinha muda de cara. O nível de fã vem dos pontos que você faz no quiz.</p>
+
+        <div class="carteirinha">
+            <div class="cart-topo">
+                <span>Alice in Chains</span>
+                <span>Fã-clube oficial</span>
+            </div>
+            <div class="cart-corpo">
+                <img id="cart_capa" class="cart-foto" alt="Capa do álbum favorito">
+                <div class="cart-dados">
+                    <h3 id="cart_nome"></h3>
+                    <p id="cart_numero"></p>
+                    <p>Álbum favorito: <b id="cart_album"></b></p>
+                    <p><span id="cart_nivel" class="nivel-fa">Novo fã</span></p>
+                </div>
+            </div>
+            <div class="cart-rodape">
+                <div class="codigo"></div>
+                <span id="cart_pontos" class="pequeno"></span>
+            </div>
+        </div>
+
+        <h3 class="centralizado">Escolha o seu álbum favorito</h3>
+        <div class="acoes">
+            <button class="botao" onclick="escolherAlbum('facelift')">Facelift</button>
+            <button class="botao" onclick="escolherAlbum('dirt')">Dirt</button>
+            <button class="botao" onclick="escolherAlbum('jarofflies')">Jar of Flies</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <h4>Feito com amor por Flávio &hearts; SPTech &copy; 2026</h4>
+    </div>
+
+    <script src="../js/carteirinha.js"></script>
+</body>
+
+</html>

@@ -48,7 +48,9 @@ Eram partes do projeto original (AquaTech) que não fazem sentido para o quiz.
 | `usuarioController.js` | Valida e-mail e senha antes do banco, responde 409 para e-mail repetido e tem a função `albumFavorito`. |
 | `usuarioModel.js` | O cadastro agora também cria o `perfil` do usuário, o login traz o álbum favorito e existe `atualizarAlbumFavorito`. |
 | `sessao.js` | Sem `getElementById`: usa o `id` do elemento direto (ex.: `b_usuario.innerHTML`). |
-| `estilo.css` | Reescrito, mais simples, com 4 temas (padrão, Facelift, Dirt e Jar of Flies). |
+| `estilo.css` | Reescrito, mais simples, com 4 temas (padrão, Facelift, Dirt e Jar of Flies). Depois ganhou o estilo do toca-discos, da carteirinha e da seção "Minha história". |
+| `tema.js` | Ganhou a função `salvarAlbumFavorito`, usada pela home, pelo toca-discos e pela carteirinha. |
+| `home.js` | Perdeu a função `salvarAlbumFavorito`, que foi para o `tema.js`. |
 | `login.html` e `cadastro.html` | Mais simples. O JavaScript foi para `login.js` e `cadastro.js`. |
 
 ## 5. Arquivos novos e para que servem
@@ -62,6 +64,8 @@ Eram partes do projeto original (AquaTech) que não fazem sentido para o quiz.
 | `js/home.js` | Troca o tema ao clicar no álbum e salva o álbum favorito. |
 | `js/quiz.js` | Busca as perguntas no banco e controla o jogo. |
 | `js/dashboard.js` | Busca os indicadores e monta os gráficos. |
+| `toca-discos.html` e `js/toca-discos.js` | O disco de vinil: ao clicar em um álbum, o disco acende, gira e toca uma música. |
+| `dashboard/carteirinha.html` e `js/carteirinha.js` | A carteirinha de fã. |
 
 ## 6. Modelagem lógica explicada
 
@@ -116,3 +120,30 @@ Por que `nivel` e `album` são tabelas e não texto: para os pontos por acerto e
 | O que é a tabela `perfil`? | O 1:1. Guarda o álbum favorito, que faz o site abrir já no tema do usuário. |
 | Onde roda o banco? | Em uma VM Linux. A API acessa pela porta 3307 do computador, redirecionada para a 3306 da VM. |
 | O que ainda é fraco? | A senha fica em texto no banco, e o servidor confia no id enviado pelo navegador. Para um projeto real, usaria hash e sessão no servidor. |
+
+## 10. Toca-discos e Carteirinha
+
+Nenhuma das duas mexeu na modelagem. Não usam API de terceiros.
+
+**Toca-discos.** Tudo é CSS e poucas linhas de JavaScript.
+- O disco tem três estados, que são só classes: `disco` (apagado e parado), `disco tocando` (aceso e girando) e `disco pausado` (aceso e parado).
+- O CSS faz o resto. O brilho muda com `filter: brightness` e `transition`, e o giro é a animação `girar` com `animation-play-state` (pausada ou rodando).
+- Ao clicar no álbum, `tocarAlbum()` troca a classe do disco, coloca a capa no centro, troca o tema do site e chama `audio_player.play()`.
+- O vetor de dados é o objeto `albuns` (nome, ano, música e arquivo de cada álbum).
+- Os áudios ficam em `public/assets/audio/` (`man-in-the-box.mp3`, `them-bones.mp3` e `nutshell.mp3`), e são arquivos meus, não vêm de nenhuma API.
+
+**Carteirinha.** Usa dados que já existem.
+- O nome e o número de fã vêm do `sessionStorage`. O número é o id do usuário completado com zeros por um `while`.
+- O nível de fã vem de `GET /quiz/kpis/:id` (o `total_pontos`) e de um `if / else if`: 0 pontos é "Novo fã", até 199 é "Fã em formação", de 200 a 499 é "Fã de carteirinha" e 500 ou mais é "Lenda do rock".
+- O álbum favorito é o do `perfil` (o 1:1). Ao clicar em um álbum, `POST /usuarios/album-favorito` atualiza o `perfil`.
+
+**Regra que vale para as duas:** o último álbum que o usuário clicar (na home, no toca-discos ou na carteirinha) vira o álbum favorito dele e o tema do site.
+
+**Perguntas que o professor pode fazer**
+
+| Pergunta | Resposta curta |
+|---|---|
+| Como o disco gira? | Uma animação de CSS (`@keyframes girar`) ligada pela classe `tocando`. O JavaScript só troca a classe. |
+| Como o som toca? | A tag `<audio>` e o método `play()` do navegador, com um arquivo da pasta `assets/audio`. |
+| De onde vem o nível de fã? | Da soma de pontos do usuário no banco (`SUM`), classificada por um `if / else if`. |
+| Teve mudança no banco? | Não. A carteirinha usa o `perfil` (1:1) e a tabela `tentativa`. |

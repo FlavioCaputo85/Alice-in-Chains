@@ -23,9 +23,10 @@ let favoritas = ["Man in the Box", "Bleed the Freak", "Them Bones", "Junkhead", 
     "Dam That River", "Down in a Hole", "Nutshell", "Rotten Apple"];
 
 function escolherAlbum(chave) {
-    aplicarTema(chave);               
-    marcarCard(chave);                
+    aplicarTema(chave);
+    marcarCard(chave);
     mostrarInfo(chave);
+    salvarAlbumFavorito(chave);
 }
 
 function marcarCard(chave) {
@@ -47,10 +48,10 @@ function mostrarInfo(chave) {
     let chips = "";
 
     for (let i = 0; i < album.destaques.length; i++) {
-        let classe = "faixa-chip";
+        let classe = "chip";
 
         if (favoritas.indexOf(album.destaques[i]) != -1) {
-            classe = "faixa-chip fav";
+            classe = "chip favorita";
         }
 
         chips += `<span class="${classe}">${album.destaques[i]}</span>`;
@@ -59,30 +60,10 @@ function mostrarInfo(chave) {
     div_album_info.innerHTML = `
         <h3>${album.nome} · ${album.ano}</h3>
         <p>${album.resumo}</p>
-        <div class="faixas">${chips}</div>
-        <a class="btn-link" href="dashboard/quiz.html">Jogar o quiz</a>
+        <div class="chips">${chips}</div>
+        <p class="pequeno">Em destaque: as músicas que o Flávio mais gosta</p>
+        <a class="botao" href="dashboard/quiz.html">Jogar o quiz</a>
     `;
-}
-
-function ajustarMenu() {
-    if (sessionStorage.NOME_USUARIO != undefined) {
-        li_login.className = "escondido";
-        li_cadastro.className = "escondido";
-        li_sair.className = "";
-    }
-}
-
-function iniciarHome() {
-    ajustarMenu();
-
-    let salvo = localStorage.getItem("TEMA_ALBUM");
-
-    if (salvo != null) {
-        marcarCard(salvo);
-        mostrarInfo(salvo);
-    } else {
-        div_album_info.innerHTML = "<p>Clique em um álbum para mudar a cara do site.</p>";
-    }
 }
 
 function sairDaConta() {
@@ -90,4 +71,15 @@ function sairDaConta() {
     window.location = "index.html";
 }
 
-iniciarHome();
+if (sessionStorage.ID_USUARIO != undefined) {
+    li_login.className = "escondido";
+    li_cadastro.className = "escondido";
+    li_sair.className = "";
+}
+
+if (temaSalvo != null) {
+    marcarCard(temaSalvo);
+    mostrarInfo(temaSalvo);
+} else {
+    div_album_info.innerHTML = "<p>Clique em um álbum para mudar a cara do site.</p>";
+}

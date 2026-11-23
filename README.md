@@ -10,6 +10,8 @@ Feito em cima do projeto base **web-data-viz** (Node.js + Express + MySQL), mant
 | Home | `public/index.html` | Explica o site, mostra os 3 álbuns (clicar muda o tema do site) e tem o "Sobre mim". |
 | Cadastro | `public/cadastro.html` | Cria a conta com validação de nome, e-mail e senha segura. |
 | Login | `public/login.html` | Entra no site. |
+| Toca-discos | `public/toca-discos.html` | Um disco de vinil que acende e gira ao escolher um álbum, tocando uma música dele. |
+| Carteirinha | `public/dashboard/carteirinha.html` | Carteirinha de fã com o nome, o álbum favorito e o nível de fã, calculado pelos pontos do quiz. |
 | Quiz | `public/dashboard/quiz.html` | 3 níveis (fácil, médio, difícil) com 8 perguntas cada, vindas do banco. |
 | Dashboard | `public/dashboard/dashboard.html` | KPIs e gráficos calculados no MySQL. |
 

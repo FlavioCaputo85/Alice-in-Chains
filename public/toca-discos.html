@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alice in Chains | Toca-discos</title>
+    <link rel="icon" href="assets/icon/logo.png">
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+
+<body>
+    <script src="js/tema.js"></script>
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo">Alice in Chains</h1>
+            <ul class="navbar">
+                <li><a href="index.html">Início</a></li>
+                <li class="agora"><a href="toca-discos.html">Toca-discos</a></li>
+                <li><a href="dashboard/quiz.html">Quiz</a></li>
+                <li><a href="dashboard/dashboard.html">Dashboard</a></li>
+                <li><a href="dashboard/carteirinha.html">Carteirinha</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="pagina">
+        <h2>Toca-discos</h2>
+        <p>Escolha um álbum ao lado e deixe o disco rodar.</p>
+
+        <div class="palco">
+            <div class="toca">
+                <div id="disco" class="disco">
+                    <div class="rotulo">
+                        <img id="img_rotulo" class="escondido" alt="Capa do álbum no centro do disco">
+                    </div>
+                </div>
+                <div id="braco" class="braco"></div>
+            </div>
+
+            <div class="escolha-album">
+                <div id="card_facelift" class="capa-opcao" onclick="tocarAlbum('facelift')">
+                    <img src="assets/imgs/albuns/facelift.jpg" alt="Capa do álbum Facelift">
+                    <span>Facelift · 1990</span>
+                </div>
+                <div id="card_dirt" class="capa-opcao" onclick="tocarAlbum('dirt')">
+                    <img src="assets/imgs/albuns/dirt.jpg" alt="Capa do álbum Dirt">
+                    <span>Dirt · 1992</span>
+                </div>
+                <div id="card_jarofflies" class="capa-opcao" onclick="tocarAlbum('jarofflies')">
+                    <img src="assets/imgs/albuns/jarofflies.jpg" alt="Capa do EP Jar of Flies">
+                    <span>Jar of Flies · 1994</span>
+                </div>
+            </div>
+        </div>
+
+        <p id="div_tocando" class="tocando-agora">Nenhum disco tocando.</p>
+        <div class="acoes">
+            <button id="btn_pausar" class="botao escondido" onclick="pausarOuContinuar()">Pausar</button>
+        </div>
+        <audio id="audio_player" onended="musicaTerminou()"></audio>
+    </div>
+
+    <div class="footer">
+        <h4>Feito com amor por Flávio &hearts; SPTech &copy; 2026</h4>
+    </div>
+
+    <script src="js/toca-discos.js"></script>
+</body>
+
+</html>
