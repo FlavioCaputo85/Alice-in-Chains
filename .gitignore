@@ -2,7 +2,6 @@
 node_modules/
 package-lock.json
 
-# Variáveis de ambiente (têm senha do banco)
 .env
 .env.dev
 

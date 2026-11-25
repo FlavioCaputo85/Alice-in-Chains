@@ -36,6 +36,7 @@ let nomesNivel = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
 let nomesAlbuns = { facelift: "Facelift", dirt: "Dirt", jarofflies: "Jar of Flies" };
 
 let nivel = "";
+let nivelId = 0; // 1=facil,2=medio,3=dificil
 let perguntas = [];
 let indice = 0;
 let acertos = 0;
@@ -43,8 +44,15 @@ let respostas = [];
 let respondeu = false;
 
 function escolherNivel(escolhido) {
-    nivel = escolhido;
-    perguntas = bancoDePerguntas[nivel];
+    // determinar nome do nível (para exibição) e id numérico (para API)
+    if (typeof escolhido === "number") {
+        nivelId = escolhido;
+        nivel = escolhido === 1 ? "facil" : escolhido === 2 ? "medio" : escolhido === 3 ? "dificil" : "";
+    } else {
+        nivel = escolhido;
+        nivelId = nivel === "facil" ? 1 : nivel === "medio" ? 2 : nivel === "dificil" ? 3 : 0;
+    }
+
     indice = 0;
     acertos = 0;
     respostas = [];
@@ -54,7 +62,37 @@ function escolherNivel(escolhido) {
     div_fim.className = "painel fim escondido";
     div_jogo.className = "painel";
 
-    mostrarPergunta(-1);
+    // Tentar buscar as perguntas do servidor; se falhar, usar o banco local
+    if (nivelId > 0) {
+        fetch(`/quiz/perguntas/${nivelId}`)
+            .then(function (res) { return res.json(); })
+            .then(function (linhas) {
+                let mapa = {};
+                for (let i = 0; i < linhas.length; i++) {
+                    let l = linhas[i];
+                    if (!mapa[l.idPergunta]) {
+                        let chaveAlbum = String(l.album || "").toLowerCase().replace(/\s+/g, "");
+                        mapa[l.idPergunta] = { texto: l.texto, album: chaveAlbum, opcoes: [] };
+                    }
+                    mapa[l.idPergunta].opcoes.push({ id: l.idOpcao, texto: l.opcao, correta: l.correta });
+                }
+
+                perguntas = Object.keys(mapa).map(function (k) { return mapa[k]; });
+
+                if (perguntas.length === 0) {
+                    perguntas = bancoDePerguntas[nivel] || [];
+                }
+
+                mostrarPergunta(-1);
+            })
+            .catch(function () {
+                perguntas = bancoDePerguntas[nivel] || [];
+                mostrarPergunta(-1);
+            });
+    } else {
+        perguntas = bancoDePerguntas[nivel] || [];
+        mostrarPergunta(-1);
+    }
 }
 
 function mostrarPergunta(escolhida) {
@@ -69,22 +107,39 @@ function mostrarPergunta(escolhida) {
 
     for (let i = 0; i < pergunta.opcoes.length; i++) {
         let classe = "opcao";
+        let opc = pergunta.opcoes[i];
+        let estaCorreta = false;
+        let textoOpc = typeof opc === "string" ? opc : opc.texto;
 
         if (escolhida != -1) {
-            if (i == pergunta.correta) {
+            if (typeof opc === "string") {
+                if (i == pergunta.correta) estaCorreta = true;
+            } else {
+                if (Number(opc.correta) == 1) estaCorreta = true;
+            }
+
+            if (estaCorreta) {
                 classe = "opcao certa";
             } else if (i == escolhida) {
                 classe = "opcao errada";
             }
         }
 
-        html += `<button class="${classe}" onclick="responder(${i})">${pergunta.opcoes[i]}</button>`;
+        html += `<button class="${classe}" onclick="responder(${i})">${textoOpc}</button>`;
     }
 
     html += `</div>`;
 
     if (escolhida != -1) {
-        if (escolhida == pergunta.correta) {
+        let acertouFlag = false;
+        let opcEscolhida = pergunta.opcoes[escolhida];
+        if (typeof opcEscolhida === "string") {
+            if (escolhida == pergunta.correta) acertouFlag = true;
+        } else {
+            if (Number(opcEscolhida.correta) == 1) acertouFlag = true;
+        }
+
+        if (acertouFlag) {
             html += `<p class="feedback">Acertou! Essa é do álbum ${nomesAlbuns[pergunta.album]}.</p>`;
         } else {
             html += `<p class="feedback">Errou. A resposta certa está em verde (álbum ${nomesAlbuns[pergunta.album]}).</p>`;
@@ -106,14 +161,24 @@ function responder(escolhida) {
     }
     respondeu = true;
 
+    let pergunta = perguntas[indice];
+    let opc = pergunta.opcoes[escolhida];
     let acertou = 0;
 
-    if (escolhida == perguntas[indice].correta) {
-        acertou = 1;
-        acertos++;
+    if (typeof opc === "string") {
+        if (escolhida == pergunta.correta) {
+            acertou = 1;
+            acertos++;
+        }
+        respostas.push(escolhida + 1);
+    } else {
+        if (Number(opc.correta) == 1) {
+            acertou = 1;
+            acertos++;
+        }
+        respostas.push(opc.id);
     }
 
-    respostas.push({ album: perguntas[indice].album, acertou: acertou });
     mostrarPergunta(escolhida);
 }
 
@@ -154,8 +219,8 @@ function finalizar() {
         },
         body: JSON.stringify({
             idUsuarioServer: sessionStorage.ID_USUARIO,
-            nivelServer: nivel,
-            respostasServer: respostas
+            idNivelServer: nivelId,
+            opcoesServer: respostas
         })
     }).then(function (resposta) {
         if (resposta.ok) {
