@@ -29,7 +29,7 @@ O sistema foi desenvolvido com base no projeto **web-data-viz**, mantendo a orga
 | Backend | mysql2 | Comunicação com o MySQL |
 | Backend | dotenv | Leitura das variáveis de ambiente |
 | Banco de dados | MySQL | Armazenamento dos usuários, perguntas, tentativas e respostas |
-| Infraestrutura | Ubuntu em VM (VirtualBox) | Execução do banco de dados |
+| Infraestrutura | Lubuntu em VM (VirtualBox) | Execução do banco de dados |
 | Ferramentas | MySQL Workbench, GitHub e Trello | Administração do banco, versionamento e organização |
 
 ## Banco de dados
@@ -94,8 +94,6 @@ O fluxo principal de comunicação é:
 No MySQL Workbench, conecte-se ao banco e execute:
 
 `src/database/script-tabelas.sql`
-
-**Atenção:** o script começa com `DROP DATABASE IF EXISTS quiz_aic`. Portanto, ele apaga e recria o banco `quiz_aic`, incluindo os dados existentes.
 
 ### 2. Configurar as variáveis de ambiente
 
