@@ -51,12 +51,14 @@ function cadastrar(req, res) {
 
 function albumFavorito(req, res) {
     let idUsuario = Number(req.body.idUsuarioServer);
-    let idAlbum = Number(req.body.idAlbumServer);
+    let album = String(req.body.albumServer);
 
-    if (isNaN(idUsuario) || isNaN(idAlbum)) {
-        res.status(400).send("Dados inválidos!");
+    if (isNaN(idUsuario)) {
+        res.status(400).send("Usuário inválido!");
+    } else if (album != "facelift" && album != "dirt" && album != "jarofflies") {
+        res.status(400).send("Álbum inválido!");
     } else {
-        usuarioModel.atualizarAlbumFavorito(idUsuario, idAlbum)
+        usuarioModel.atualizarAlbumFavorito(idUsuario, album)
             .then(function () {
                 res.status(200).send("Álbum favorito salvo!");
             })

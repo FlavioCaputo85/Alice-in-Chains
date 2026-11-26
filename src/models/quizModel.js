@@ -1,77 +1,87 @@
 let database = require("../database/config");
 
-function buscarPerguntas(idNivel) {
+function buscarPerguntas(nivel) {
     let instrucaoSql = `
-        SELECT p.id AS idPergunta, p.texto, a.nome AS album, n.pontos_por_acerto,
-               o.id AS idOpcao, o.texto AS opcao, o.correta
-        FROM pergunta p
-        JOIN opcao o ON o.fk_pergunta = p.id
-        JOIN album a ON a.id = p.fk_album
-        JOIN nivel n ON n.id = p.fk_nivel
-        WHERE p.fk_nivel = ${idNivel}
-        ORDER BY p.id, o.id;
+        SELECT id, texto, album, pontos, opcao_a, opcao_b, opcao_c, opcao_d, correta
+        FROM pergunta
+        WHERE nivel = ${nivel}
+        ORDER BY id;
     `;
     return database.executar(instrucaoSql);
 }
 
-function salvarPartida(idUsuario, idNivel, listaOpcoes) {
-    let criarTentativa = `
-        INSERT INTO tentativa (fk_usuario, fk_nivel) VALUES (${idUsuario}, ${idNivel});
+function criarTentativa(idUsuario, nivel) {
+    let instrucaoSql = `
+        INSERT INTO tentativa (fk_usuario, nivel) VALUES (${idUsuario}, ${nivel});
     `;
-
-    return database.executar(criarTentativa).then(function (tentativa) {
-        let id = tentativa.insertId;
-
-        let salvarRespostas = `
-            INSERT INTO resposta (fk_tentativa, fk_pergunta, fk_opcao, acertou)
-            SELECT ${id}, o.fk_pergunta, o.id, o.correta
-            FROM opcao o
-            JOIN pergunta p ON p.id = o.fk_pergunta
-            WHERE p.fk_nivel = ${idNivel} AND o.id IN (${listaOpcoes});
-        `;
-
-        let calcularPontos = `
-            UPDATE tentativa SET
-                acertos = (SELECT COALESCE(SUM(acertou), 0) FROM resposta WHERE fk_tentativa = ${id}),
-                total = (SELECT COUNT(*) FROM resposta WHERE fk_tentativa = ${id}),
-                pontos = (SELECT COALESCE(SUM(acertou), 0) FROM resposta WHERE fk_tentativa = ${id})
-                         * (SELECT pontos_por_acerto FROM nivel WHERE id = ${idNivel})
-            WHERE id = ${id};
-        `;
-
-        let apagarVazia = `DELETE FROM tentativa WHERE id = ${id} AND total = 0;`;
-
-        return database.executar(salvarRespostas)
-            .catch(function (erro) {
-                return database.executar(`DELETE FROM tentativa WHERE id = ${id};`).then(function () {
-                    throw erro;
-                });
-            })
-            .then(function () {
-                return database.executar(calcularPontos);
-            })
-            .then(function () {
-                return database.executar(apagarVazia);
-            });
-    });
+    return database.executar(instrucaoSql);
 }
 
-function buscarKpis(idUsuario) {
+function salvarRespostas(idTentativa, nivel, perguntas, escolhas) {
+    let valores = "";
+
+    for (let i = 0; i < perguntas.length; i++) {
+        if (i > 0) {
+            valores += ", ";
+        }
+        valores += `(${idTentativa}, ${perguntas[i]}, ${escolhas[i]},
+            (SELECT correta = ${escolhas[i]} FROM pergunta WHERE id = ${perguntas[i]} AND nivel = ${nivel}))`;
+    }
+
+    let instrucaoSql = `
+        INSERT INTO resposta (fk_tentativa, fk_pergunta, escolha, acertou) VALUES ${valores};
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function calcularPontos(idTentativa) {
+    let instrucaoSql = `
+        UPDATE tentativa SET
+            acertos = (SELECT SUM(acertou) FROM resposta WHERE fk_tentativa = ${idTentativa}),
+            total = (SELECT COUNT(*) FROM resposta WHERE fk_tentativa = ${idTentativa}),
+            pontos = (SELECT SUM(r.acertou * p.pontos) FROM resposta r
+                      JOIN pergunta p ON p.id = r.fk_pergunta
+                      WHERE r.fk_tentativa = ${idTentativa})
+        WHERE id = ${idTentativa};
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function apagarTentativa(idTentativa) {
+    let instrucaoSql = `
+        DELETE FROM tentativa WHERE id = ${idTentativa};
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function buscarKpiPontos(idUsuario) {
     let instrucaoSql = `
         SELECT
             COUNT(*) AS partidas,
-            ROUND(AVG(pontos), 1) AS media_pontos,
-            MAX(pontos) AS melhor,
-            MIN(pontos) AS pior,
             COALESCE(SUM(pontos), 0) AS total_pontos,
-            (SELECT ROUND(AVG(pontos), 1) FROM tentativa) AS media_geral,
-            (SELECT COUNT(*) + 1 FROM (
-                SELECT fk_usuario, SUM(pontos) AS soma FROM tentativa GROUP BY fk_usuario
-            ) AS ranking
-            WHERE ranking.soma > (SELECT COALESCE(SUM(pontos), 0) FROM tentativa WHERE fk_usuario = ${idUsuario})
-            ) AS posicao
+            (SELECT pontos FROM tentativa WHERE fk_usuario = ${idUsuario}
+             ORDER BY id DESC LIMIT 1) AS pontos_ultima
         FROM tentativa
         WHERE fk_usuario = ${idUsuario};
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function buscarKpiRanking() {
+    let instrucaoSql = `
+        SELECT fk_usuario, SUM(pontos) AS total
+        FROM tentativa
+        GROUP BY fk_usuario;
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function buscarKpiAcertos(idUsuario) {
+    let instrucaoSql = `
+        SELECT acertos, total
+        FROM tentativa
+        WHERE fk_usuario = ${idUsuario}
+        ORDER BY id DESC LIMIT 2;
     `;
     return database.executar(instrucaoSql);
 }
@@ -88,13 +98,12 @@ function buscarEvolucao(idUsuario) {
 
 function buscarAlbuns(idUsuario) {
     let instrucaoSql = `
-        SELECT a.nome AS album, COALESCE(ROUND(AVG(r.acertou) * 100), 0) AS aproveitamento
-        FROM album a
-        JOIN pergunta p ON p.fk_album = a.id
-        LEFT JOIN resposta r ON r.fk_pergunta = p.id
-            AND r.fk_tentativa IN (SELECT id FROM tentativa WHERE fk_usuario = ${idUsuario})
-        GROUP BY a.id, a.nome
-        ORDER BY a.id;
+        SELECT p.album, SUM(r.acertou) AS acertos, COUNT(*) AS respostas
+        FROM resposta r
+        JOIN pergunta p ON p.id = r.fk_pergunta
+        JOIN tentativa t ON t.id = r.fk_tentativa
+        WHERE t.fk_usuario = ${idUsuario}
+        GROUP BY p.album;
     `;
     return database.executar(instrucaoSql);
 }
@@ -113,13 +122,11 @@ function buscarRanking() {
 
 function buscarDificeis() {
     let instrucaoSql = `
-        SELECT p.texto, a.nome AS album, COUNT(*) AS vezes,
-               ROUND(AVG(r.acertou) * 100) AS aproveitamento
+        SELECT p.texto, p.album, SUM(r.acertou) AS acertos, COUNT(*) AS vezes
         FROM resposta r
         JOIN pergunta p ON p.id = r.fk_pergunta
-        JOIN album a ON a.id = p.fk_album
-        GROUP BY p.id, p.texto, a.nome
-        ORDER BY aproveitamento ASC, vezes DESC
+        GROUP BY p.id, p.texto, p.album
+        ORDER BY SUM(r.acertou) / COUNT(*) ASC, vezes DESC
         LIMIT 3;
     `;
     return database.executar(instrucaoSql);
@@ -127,8 +134,13 @@ function buscarDificeis() {
 
 module.exports = {
     buscarPerguntas,
-    salvarPartida,
-    buscarKpis,
+    criarTentativa,
+    salvarRespostas,
+    calcularPontos,
+    apagarTentativa,
+    buscarKpiPontos,
+    buscarKpiRanking,
+    buscarKpiAcertos,
     buscarEvolucao,
     buscarAlbuns,
     buscarRanking,

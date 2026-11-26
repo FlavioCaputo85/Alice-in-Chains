@@ -47,7 +47,7 @@ Eram partes do projeto original (AquaTech) que não fazem sentido para o quiz.
 | `app.js` | Só carrega as rotas `usuarios` e `quiz`. Usa `let` e `if` no lugar de `var` e `===`. |
 | `usuarioController.js` | Valida e-mail e senha antes do banco, responde 409 para e-mail repetido e tem a função `albumFavorito`. |
 | `usuarioModel.js` | O cadastro agora também cria o `perfil` do usuário, o login traz o álbum favorito e existe `atualizarAlbumFavorito`. |
-| `sessao.js` | Sem `getElementById`: usa o `id` do elemento direto (ex.: `b_usuario.innerHTML`). |
+| `sessao.js` | Usa `let` e o `id` do elemento direto (ex.: `b_usuario.innerHTML`). Ficaram só `validarSessao` e `limparSessao`. |
 | `estilo.css` | Reescrito, mais simples, com 4 temas (padrão, Facelift, Dirt e Jar of Flies). Depois ganhou o estilo do toca-discos, da carteirinha e da seção "Minha história". |
 | `tema.js` | Ganhou a função `salvarAlbumFavorito`, usada pela home, pelo toca-discos e pela carteirinha. |
 | `home.js` | Perdeu a função `salvarAlbumFavorito`, que foi para o `tema.js`. |
@@ -57,7 +57,7 @@ Eram partes do projeto original (AquaTech) que não fazem sentido para o quiz.
 
 | Arquivo | Para que serve |
 |---|---|
-| `script-tabelas.sql` | Cria as 8 tabelas e insere álbuns, níveis, 24 perguntas e 88 opções. |
+| `script-tabelas.sql` | Cria as 5 tabelas e insere as 24 perguntas (com as opções na própria tabela `pergunta`). |
 | `routes/quiz.js`, `controllers/quizController.js`, `models/quizModel.js` | A API do quiz e do dashboard. |
 | `js/validacao.js` | Valida nome, e-mail e senha com `if`, `for` e `while`. Também é usado pelo servidor. |
 | `js/tema.js` | Aplica o tema do álbum ao abrir a página. |
@@ -73,30 +73,29 @@ Os três relacionamentos pedidos:
 
 - **1:1, `usuario` e `perfil`.** Cada usuário tem exatamente um perfil. A chave primária do `perfil` é a própria chave estrangeira `fk_usuario`, então não dá para ter dois perfis do mesmo usuário. O perfil guarda o álbum favorito.
 - **1:N, `usuario` e `tentativa`.** Um usuário joga várias partidas, e cada partida é de um usuário só. A chave estrangeira `fk_usuario` fica na tabela do lado "N".
-- **N:N, `tentativa` e `pergunta`.** Uma partida tem várias perguntas e uma pergunta aparece em várias partidas. Um banco relacional não guarda N:N direto, então se cria a tabela associativa `resposta`, com chave primária composta (`fk_tentativa`, `fk_pergunta`). Ela também guarda a opção escolhida e se acertou.
+- **N:N, `tentativa` e `pergunta`.** Uma partida tem várias perguntas e uma pergunta aparece em várias partidas. Um banco relacional não guarda N:N direto, então se cria a tabela associativa `resposta`, com chave primária composta (`fk_tentativa`, `fk_pergunta`). Ela também guarda a opção escolhida (`escolha`, de 1 a 4) e se acertou.
 
-Outros 1:N: `album` tem várias `pergunta`, `nivel` tem várias `pergunta` e várias `tentativa`, e `pergunta` tem várias `opcao`.
-
-Por que `nivel` e `album` são tabelas e não texto: para os pontos por acerto e os nomes ficarem em um só lugar, e para o servidor calcular os pontos pelo banco.
+O modelo foi simplificado para 5 tabelas: o álbum, o nível, os pontos e as 4 opções viraram colunas da `pergunta`, e o álbum favorito do `perfil` é guardado como texto (`facelift`, `dirt` ou `jarofflies`). Os pontos continuam vindo do banco (coluna `pontos` da pergunta).
 
 ## 7. Fluxos passo a passo
 
 **Cadastro.** `cadastro.js` valida o formulário e chama `POST /usuarios/cadastrar` → o controller valida de novo → o model insere em `usuario` e depois em `perfil`. Se o e-mail já existe, o MySQL recusa (coluna `UNIQUE`) e o controller responde 409.
 
-**Login.** `login.js` chama `POST /usuarios/autenticar` → o model faz `SELECT` com `LEFT JOIN` em `perfil` e `album` → o JS guarda id, nome e álbum favorito no `sessionStorage` e aplica o tema salvo.
+**Login.** `login.js` chama `POST /usuarios/autenticar` → o model faz `SELECT` com `LEFT JOIN` em `perfil` → o JS guarda id, nome e álbum favorito no `sessionStorage` e aplica o tema salvo.
 
-**Jogar.** `quiz.js` chama `GET /quiz/perguntas/:idNivel`. O banco devolve uma linha por opção (`JOIN` de `pergunta`, `opcao`, `album` e `nivel`), e um `for` agrupa as linhas em um vetor de perguntas.
+**Jogar.** `quiz.js` chama `GET /quiz/perguntas/:nivel`. O banco devolve uma linha por pergunta, já com `opcao_a` a `opcao_d` e o número da `correta`.
 
-**Salvar a partida.** `POST /quiz/salvar` recebe só o id do usuário, o id do nível e o vetor com os ids das opções escolhidas. O model faz quatro passos: cria a `tentativa`, insere as `resposta` (copiando o campo `correta` de cada opção), calcula acertos e pontos com `SUM` e `COUNT`, e apaga a tentativa se nenhuma resposta for válida. Os pontos nunca vêm do navegador.
+**Salvar a partida.** `POST /quiz/salvar` recebe o id do usuário, o nível, o vetor com os ids das perguntas e o vetor com as escolhas (1 a 4). O controller chama 3 funções do model, uma depois da outra: `criarTentativa`, `salvarRespostas` (o `acertou` é calculado pelo banco comparando a `escolha` com a `correta`) e `calcularPontos` (acertos e pontos com `SUM` e `COUNT`). Se uma pergunta não for do nível, o `acertou` fica nulo, o MySQL recusa (`NOT NULL`) e o controller chama `apagarTentativa`. Os pontos nunca vêm do navegador.
 
-**Dashboard.** `dashboard.js` chama 5 rotas. Cada uma roda um `SELECT` e devolve JSON, que vira card ou gráfico.
+**Dashboard.** `dashboard.js` chama 7 rotas, uma para cada KPI e uma para cada gráfico/lista. Cada uma roda um `SELECT` e devolve JSON. Não há KPI de média (média engana).
 
-| Indicador | SQL |
-|---|---|
-| Partidas, média, melhor, menor | `COUNT`, `AVG`, `MAX`, `MIN` em `tentativa` |
-| Posição no ranking | Conta quantos usuários têm `SUM(pontos)` maior, mais 1 |
-| Desempenho por álbum | `AVG(acertou) * 100` com `GROUP BY album` (passa pela tabela N:N `resposta`) |
-| Perguntas mais difíceis | `AVG(acertou)` por pergunta, `ORDER BY` do menor e `LIMIT 3` |
+| Indicador | Rota | SQL | Variação mostrada |
+|---|---|---|---|
+| Pontuação total | `/quiz/kpi-pontos/:id` | `SUM(pontos)` e os pontos da última partida (`ORDER BY id DESC LIMIT 1`) | ▲ pontos ganhos na última partida |
+| Colocação no ranking | `/quiz/kpi-ranking` | `SUM(pontos)` de cada jogador com `GROUP BY`. Um `for` no JS conta quantos têm mais pontos que eu, agora e antes da última partida | ▲ subiu / ▼ caiu / manteve |
+| Acertos na última partida | `/quiz/kpi-acertos/:id` | `acertos` e `total` das 2 últimas partidas (`LIMIT 2`) | ▲ / ▼ acertos a mais ou a menos que a anterior |
+| Desempenho por álbum (gráfico) | `/quiz/albuns/:id` | `SUM(acertou)` e `COUNT(*)` com `GROUP BY album`. O JS calcula a % com `Math.round(acertos * 100 / respostas)` | |
+| Perguntas mais difíceis (lista) | `/quiz/dificeis` | acertos e respostas por pergunta, `ORDER BY` do menor aproveitamento e `LIMIT 3`. O JS calcula a % | |
 
 ## 8. Regras da disciplina
 
@@ -134,7 +133,7 @@ Nenhuma das duas mexeu na modelagem. Não usam API de terceiros.
 
 **Carteirinha.** Usa dados que já existem.
 - O nome e o número de fã vêm do `sessionStorage`. O número é o id do usuário completado com zeros por um `while`.
-- O nível de fã vem de `GET /quiz/kpis/:id` (o `total_pontos`) e de um `if / else if`: 0 pontos é "Novo fã", até 199 é "Fã em formação", de 200 a 499 é "Fã de carteirinha" e 500 ou mais é "Lenda do rock".
+- O nível de fã vem de `GET /quiz/kpi-pontos/:id` (o `total_pontos`) e de um `if / else if`: 0 pontos é "Novo fã", até 199 é "Fã em formação", de 200 a 499 é "Fã de carteirinha" e 500 ou mais é "Lenda do rock".
 - O álbum favorito é o do `perfil` (o 1:1). Ao clicar em um álbum, `POST /usuarios/album-favorito` atualiza o `perfil`.
 
 **Regra que vale para as duas:** o último álbum que o usuário clicar (na home, no toca-discos ou na carteirinha) vira o álbum favorito dele e o tema do site.

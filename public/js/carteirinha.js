@@ -36,24 +36,25 @@ function mostrarAlbum(chave) {
 }
 
 function carregarNivel() {
-    fetch("/quiz/kpis/" + sessionStorage.ID_USUARIO).then(function (resposta) {
-        resposta.json().then(function (lista) {
-            let pontos = Number(lista[0].total_pontos);
-            let nivel = "Novo fã";
+    fetch("/quiz/kpi-pontos/" + sessionStorage.ID_USUARIO).then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (lista) {
+                let pontos = Number(lista[0].total_pontos);
+                let nivel = "Novo fã";
 
-            if (pontos >= 500) {
-                nivel = "Lenda do rock";
-            } else if (pontos >= 200) {
-                nivel = "Fã de carteirinha";
-            } else if (pontos > 0) {
-                nivel = "Fã em formação";
-            }
+                if (pontos >= 500) {
+                    nivel = "Lenda do rock";
+                } else if (pontos >= 200) {
+                    nivel = "Fã de carteirinha";
+                } else if (pontos > 0) {
+                    nivel = "Fã em formação";
+                }
 
-            cart_nivel.innerHTML = nivel;
-            cart_pontos.innerHTML = pontos + " pontos · " + lista[0].partidas + " partidas";
-        });
+                cart_nivel.innerHTML = nivel;
+                cart_pontos.innerHTML = pontos + " pontos · " + lista[0].partidas + " partidas";
+            });
+        }
     }).catch(function (erro) {
         console.log(erro);
-        cart_nivel.innerHTML = "Novo fã";
     });
 }

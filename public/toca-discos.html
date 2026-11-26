@@ -56,9 +56,19 @@
         </div>
 
         <p id="div_tocando" class="tocando-agora">Nenhum disco tocando.</p>
-        <div class="acoes">
-            <button id="btn_pausar" class="botao escondido" onclick="pausarOuContinuar()">Pausar</button>
+
+        <div id="div_controle" class="controle escondido">
+            <div class="controle-topo">
+                <span id="span_posicao"></span>
+                <div class="controle-botoes">
+                    <button class="botao vazio" onclick="faixaAnterior()">Anterior</button>
+                    <button id="btn_pausar" class="botao" onclick="pausarOuContinuar()">Pausar</button>
+                    <button class="botao vazio" onclick="proximaFaixa()">Próxima</button>
+                </div>
+            </div>
+            <ul id="lista_faixas" class="lista-faixas"></ul>
         </div>
+
         <audio id="audio_player" onended="musicaTerminou()"></audio>
     </div>
 

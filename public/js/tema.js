@@ -11,20 +11,12 @@ if (temaSalvo != null) {
 
 function salvarAlbumFavorito(chave) {
     if (sessionStorage.ID_USUARIO != undefined) {
-        let idAlbum = 1;
-
-        if (chave == "dirt") {
-            idAlbum = 2;
-        } else if (chave == "jarofflies") {
-            idAlbum = 3;
-        }
-
         fetch("/usuarios/album-favorito", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 idUsuarioServer: sessionStorage.ID_USUARIO,
-                idAlbumServer: idAlbum
+                albumServer: chave
             })
         }).catch(function (erro) {
             console.log(erro);

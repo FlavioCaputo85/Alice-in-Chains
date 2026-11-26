@@ -12,65 +12,82 @@ function responderLista(promessa, res) {
 }
 
 function perguntas(req, res) {
-    let idNivel = Number(req.params.idNivel);
+    let nivel = Number(req.params.nivel);
 
-    if (isNaN(idNivel)) {
+    if (nivel != 1 && nivel != 2 && nivel != 3) {
         res.status(400).send("O nível está inválido!");
     } else {
-        responderLista(quizModel.buscarPerguntas(idNivel), res);
+        responderLista(quizModel.buscarPerguntas(nivel), res);
     }
 }
 
 function salvar(req, res) {
     let idUsuario = Number(req.body.idUsuarioServer);
-    let idNivel = Number(req.body.idNivelServer);
-    let opcoes = req.body.opcoesServer;
-    let lista = "";
-    let opcoesValidas = true;
+    let nivel = Number(req.body.nivelServer);
+    let perguntas = req.body.perguntasServer;
+    let escolhas = req.body.escolhasServer;
+    let respostasValidas = true;
 
-    if (Array.isArray(opcoes) == false || opcoes.length == 0 || opcoes.length > 20) {
-        opcoesValidas = false;
+    if (perguntas == undefined || escolhas == undefined) {
+        respostasValidas = false;
+    } else if (perguntas.length == 0 || perguntas.length > 8 || perguntas.length != escolhas.length) {
+        respostasValidas = false;
     } else {
-        for (let i = 0; i < opcoes.length; i++) {
-            let numero = Number(opcoes[i]);
+        for (let i = 0; i < perguntas.length; i++) {
+            perguntas[i] = Number(perguntas[i]);
+            escolhas[i] = Number(escolhas[i]);
 
-            if (isNaN(numero)) {
-                opcoesValidas = false;
-            } else if (i == 0) {
-                lista = String(numero);
-            } else {
-                lista += "," + numero;
+            if (isNaN(perguntas[i]) || isNaN(escolhas[i]) || escolhas[i] < 1 || escolhas[i] > 4) {
+                respostasValidas = false;
             }
         }
     }
 
-    if (isNaN(idUsuario) || isNaN(idNivel)) {
+    if (isNaN(idUsuario) || (nivel != 1 && nivel != 2 && nivel != 3)) {
         res.status(400).send("Usuário ou nível inválido!");
-    } else if (opcoesValidas == false) {
+    } else if (respostasValidas == false) {
         res.status(400).send("As respostas estão inválidas!");
     } else {
-        quizModel.salvarPartida(idUsuario, idNivel, lista)
-            .then(function (resultado) {
-                if (resultado.affectedRows == 1) {
-                    res.status(400).send("Nenhuma resposta válida para este nível!");
-                } else {
+        quizModel.criarTentativa(idUsuario, nivel).then(function (resultado) {
+            let idTentativa = resultado.insertId;
+
+            quizModel.salvarRespostas(idTentativa, nivel, perguntas, escolhas).then(function () {
+                quizModel.calcularPontos(idTentativa).then(function () {
                     res.status(201).send("Partida salva!");
-                }
-            })
-            .catch(function (erro) {
+                });
+            }).catch(function (erro) {
                 console.log(erro);
-                res.status(500).json(erro.sqlMessage);
+                quizModel.apagarTentativa(idTentativa);
+                res.status(400).send("As respostas estão inválidas!");
             });
+        }).catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
     }
 }
 
-function kpis(req, res) {
+function kpiPontos(req, res) {
     let idUsuario = Number(req.params.idUsuario);
 
     if (isNaN(idUsuario)) {
         res.status(400).send("O id do usuário está inválido!");
     } else {
-        responderLista(quizModel.buscarKpis(idUsuario), res);
+        responderLista(quizModel.buscarKpiPontos(idUsuario), res);
+    }
+}
+
+function kpiRanking(req, res) {
+    responderLista(quizModel.buscarKpiRanking(), res);
+}
+
+function kpiAcertos(req, res) {
+    let idUsuario = Number(req.params.idUsuario);
+
+    if (isNaN(idUsuario)) {
+        res.status(400).send("O id do usuário está inválido!");
+    } else {
+        responderLista(quizModel.buscarKpiAcertos(idUsuario), res);
     }
 }
 
@@ -105,7 +122,9 @@ function dificeis(req, res) {
 module.exports = {
     perguntas,
     salvar,
-    kpis,
+    kpiPontos,
+    kpiRanking,
+    kpiAcertos,
     evolucao,
     albuns,
     ranking,

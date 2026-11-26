@@ -3,7 +3,7 @@ let router = express.Router();
 
 let quizController = require("../controllers/quizController");
 
-router.get("/perguntas/:idNivel", function (req, res) {
+router.get("/perguntas/:nivel", function (req, res) {
     quizController.perguntas(req, res);
 });
 
@@ -11,8 +11,16 @@ router.post("/salvar", function (req, res) {
     quizController.salvar(req, res);
 });
 
-router.get("/kpis/:idUsuario", function (req, res) {
-    quizController.kpis(req, res);
+router.get("/kpi-pontos/:idUsuario", function (req, res) {
+    quizController.kpiPontos(req, res);
+});
+
+router.get("/kpi-ranking", function (req, res) {
+    quizController.kpiRanking(req, res);
+});
+
+router.get("/kpi-acertos/:idUsuario", function (req, res) {
+    quizController.kpiAcertos(req, res);
 });
 
 router.get("/evolucao/:idUsuario", function (req, res) {

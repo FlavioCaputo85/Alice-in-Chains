@@ -34,12 +34,21 @@
         <p id="div_aviso"></p>
 
         <div class="kpis">
-            <div class="kpi"><strong id="kpi_partidas">-</strong><span>Partidas jogadas</span></div>
-            <div class="kpi"><strong id="kpi_media">-</strong><span>Média de pontos</span><small id="kpi_media_geral"></small></div>
-            <div class="kpi"><strong id="kpi_melhor">-</strong><span>Melhor partida</span></div>
-            <div class="kpi"><strong id="kpi_pior">-</strong><span>Menor pontuação</span></div>
-            <div class="kpi"><strong id="kpi_posicao">-</strong><span>Posição no ranking</span></div>
-            <div class="kpi"><strong id="kpi_album">-</strong><span>Álbum que você mais domina</span><small id="kpi_album_detalhe"></small></div>
+            <div class="kpi">
+                <span>Pontuação total</span>
+                <strong id="kpi_pontos">-</strong>
+                <small id="kpi_pontos_variacao"></small>
+            </div>
+            <div class="kpi">
+                <span>Colocação no ranking</span>
+                <strong id="kpi_posicao">-</strong>
+                <small id="kpi_posicao_variacao"></small>
+            </div>
+            <div class="kpi">
+                <span>Acertos na última partida</span>
+                <strong id="kpi_acertos">-</strong>
+                <small id="kpi_acertos_variacao"></small>
+            </div>
         </div>
 
         <div class="graficos">
@@ -49,11 +58,10 @@
 
         <div class="graficos">
             <div class="grafico"><canvas id="grafico_ranking"></canvas></div>
-        </div>
-
-        <div class="painel">
-            <h2>Perguntas que mais derrubam os jogadores</h2>
-            <div id="div_dificeis"></div>
+            <div class="grafico lista">
+                <h3>Perguntas que mais derrubam os jogadores</h3>
+                <div id="div_dificeis"></div>
+            </div>
         </div>
 
         <div class="acoes">

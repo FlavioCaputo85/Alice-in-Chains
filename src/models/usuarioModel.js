@@ -2,10 +2,9 @@ let database = require("../database/config");
 
 function autenticar(email, senha) {
     let instrucaoSql = `
-        SELECT u.id, u.nome, u.email, p.fk_album_favorito AS albumFavorito, a.nome AS nomeAlbum
+        SELECT u.id, u.nome, u.email, p.album_favorito AS albumFavorito
         FROM usuario u
         LEFT JOIN perfil p ON p.fk_usuario = u.id
-        LEFT JOIN album a ON a.id = p.fk_album_favorito
         WHERE u.email = '${email}' AND u.senha = '${senha}';
     `;
     return database.executar(instrucaoSql);
@@ -20,9 +19,9 @@ function cadastrar(nome, email, senha) {
     });
 }
 
-function atualizarAlbumFavorito(idUsuario, idAlbum) {
+function atualizarAlbumFavorito(idUsuario, album) {
     let instrucaoSql = `
-        UPDATE perfil SET fk_album_favorito = ${idAlbum} WHERE fk_usuario = ${idUsuario};
+        UPDATE perfil SET album_favorito = '${album}' WHERE fk_usuario = ${idUsuario};
     `;
     return database.executar(instrucaoSql);
 }

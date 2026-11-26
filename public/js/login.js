@@ -19,16 +19,8 @@ function entrar() {
                     sessionStorage.NOME_USUARIO = usuario.nome;
                     sessionStorage.EMAIL_USUARIO = usuario.email;
 
-                    if (usuario.nomeAlbum != null) {
-                        sessionStorage.NOME_ALBUM = usuario.nomeAlbum;
-                    }
-
-                    if (usuario.albumFavorito == 1) {
-                        localStorage.setItem("TEMA_ALBUM", "facelift");
-                    } else if (usuario.albumFavorito == 2) {
-                        localStorage.setItem("TEMA_ALBUM", "dirt");
-                    } else if (usuario.albumFavorito == 3) {
-                        localStorage.setItem("TEMA_ALBUM", "jarofflies");
+                    if (usuario.albumFavorito != null) {
+                        localStorage.setItem("TEMA_ALBUM", usuario.albumFavorito);
                     }
 
                     window.location = "index.html";
