@@ -1,7 +1,4 @@
-SET NAMES utf8mb4;
-
-DROP DATABASE IF EXISTS quiz_aic;
-CREATE DATABASE quiz_aic CHARACTER SET utf8mb4;
+CREATE DATABASE quiz_aic;
 USE quiz_aic;
 
 CREATE TABLE usuario (
