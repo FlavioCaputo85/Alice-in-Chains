@@ -63,9 +63,6 @@ function mostrarPergunta(escolhida) {
 
     for (let i = 0; i < opcoes.length; i++) {
         let classe = "opcao";
-        let opc = pergunta.opcoes[i];
-        let estaCorreta = false;
-        let textoOpc = typeof opc === "string" ? opc : opc.texto;
 
         if (escolhida != -1) {
             if (i + 1 == pergunta.correta) {
